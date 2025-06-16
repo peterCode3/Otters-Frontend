@@ -14,20 +14,30 @@ const Card = ({
   trend,
   trendClass,
   progress,
-  darkMode,
 }) => (
-  <div className={`rounded-xl p-6 shadow-soft transition-colors
-    ${darkMode ? 'bg-[#14212e] text-white' : 'bg-white text-text'}`}>
+  <div
+    className="rounded-xl p-6 shadow-soft"
+    style={{
+      background: 'var(--card-bg)',
+      color: 'var(--card-title)',
+    }}
+  >
     <div className="flex justify-between items-center mb-2">
-      <Heading level="6" className={`text-sm font-medium ${darkMode ? 'text-secondary' : 'text-secondary'}`}>
+      <Heading
+        level="6"
+        className="text-sm font-medium"
+        style={{ color: 'var(--color-secondary)' }}
+      >
         {title}
       </Heading>
-      <div className={`text-primary`}>
+      <div style={{ color: 'var(--card-value)' }}>
         <FontAwesomeIcon icon={icon} className={iconClass || 'text-xl'} />
       </div>
     </div>
     <div className="flex items-end">
-      <Paragraph className={`text-3xl font-bold ${valueClass}`}>{value}</Paragraph>
+      <Paragraph className={`text-3xl font-bold ${valueClass}`} style={{ color: 'var(--card-value)' }}>
+        {value}
+      </Paragraph>
       {trend !== undefined && (
         <Paragraph className={`text-xs ml-2 mb-1 flex items-center ${trendClass}`}>
           {trendIcon && <FontAwesomeIcon icon={trendIcon} className="mr-1" />}
@@ -37,10 +47,16 @@ const Card = ({
     </div>
     {progress !== undefined && (
       <div className="mt-2">
-        <div className={`w-full ${darkMode ? 'bg-gray-700' : 'bg-gray-100'} rounded-full h-1`}>
+        <div
+          className="w-full rounded-full h-1"
+          style={{ background: 'var(--color-secondary)', opacity: 0.2 }}
+        >
           <div
-            className="bg-primary h-1 rounded-full"
-            style={{ width: `${progress}%` }}
+            className="h-1 rounded-full"
+            style={{
+              background: 'var(--color-primary)',
+              width: `${progress}%`,
+            }}
           ></div>
         </div>
       </div>
@@ -58,7 +74,6 @@ Card.propTypes = {
   trend: PropTypes.string,
   trendClass: PropTypes.string,
   progress: PropTypes.number,
-  darkMode: PropTypes.bool,
 };
 
 export default Card;

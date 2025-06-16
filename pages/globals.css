@@ -1,0 +1,120 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import "tailwindcss";
+
+body {
+  background: var(--color-background);
+  color: var(--color-text);
+}
+
+:root {
+  /* General colors */
+  --color-background: #f9f9f9;
+  --color-white: #fff;
+  --color-black: #00263D;
+  --color-text: #00263D;
+  --color-secondary: #6B7280;
+  --color-primary: #00A3CF;
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-danger: #EF4444;
+  --color-info: #3B82F6;
+
+  /* Sidebar unique colors */
+  --sidebar-bg: #fff;
+  --sidebar-text: #00263D;
+  --sidebar-active-bg: #00A3CF;
+  --sidebar-active-text: #fff;
+  --sidebar-hover-bg: #f3f4f6;
+  --sidebar-hover-text: #00A3CF;
+
+  /* Card unique colors */
+  --card-bg: #fff;
+  --card-title: #00263D;
+  --card-value: #00A3CF;
+  --card-icon-bg: #e0f7fa;
+
+  /* DashboardHeader unique colors */
+  --dashboard-header-title: #00263D;
+  --dashboard-header-input-bg: #fff;
+  --dashboard-header-input-border: #6B7280;
+  --dashboard-header-input-text: #00263D;
+  --dashboard-header-input-placeholder: #6B7280;
+  --dashboard-header-input-focus: #00A3CF;
+  --dashboard-header-btn-bg: #00A3CF;
+  --dashboard-header-btn-text: #fff;
+
+  /* ...existing code... */
+  --client-card-bg: #fff;
+  --client-card-border: #f3f4f6;
+  --client-card-title: #00263D;
+  --client-card-tag-bg: #f3f4f6;
+  --client-card-tag-text: #6B7280;
+  --client-card-status-healthy-bg: rgba(16,185,129,0.1);
+  --client-card-status-healthy-text: #10B981;
+  --client-card-status-risk-bg: rgba(245,158,11,0.1);
+  --client-card-status-risk-text: #F59E0B;
+  --client-card-status-poor-bg: rgba(239,68,68,0.1);
+  --client-card-status-poor-text: #EF4444;
+  --client-card-btn-bg: #fff;
+  --client-card-btn-border: #00A3CF;
+  --client-card-btn-text: #00A3CF;
+  --client-card-btn-hover-bg: rgba(0,163,207,0.05);
+  --client-card-metric-bg: #f9fafb;
+}
+
+[data-theme="dark"] {
+  --color-background: #0d1a26;
+  --color-white: #1e293b;
+  --color-black: #fff;
+  --color-text: #fff;
+  --color-secondary: #9CA3AF;
+  --color-primary: #00A3CF;
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-danger: #EF4444;
+  --color-info: #2563EB;
+
+  /* Sidebar unique colors (dark) */
+  --sidebar-bg: #1e293b;
+  --sidebar-text: #fff;
+  --sidebar-active-bg: #00A3CF;
+  --sidebar-active-text: #fff;
+  --sidebar-hover-bg: #334155;
+  --sidebar-hover-text: #00A3CF;
+
+  /* Card unique colors (dark) */
+  --card-bg: #223047;
+  --card-title: #fff;
+  --card-value: #00A3CF;
+  --card-icon-bg: #164e63;
+
+  /* DashboardHeader unique colors (dark) */
+  --dashboard-header-title: #fff;
+  --dashboard-header-input-bg: #223047;
+  --dashboard-header-input-border: #9CA3AF;
+  --dashboard-header-input-text: #fff;
+  --dashboard-header-input-placeholder: #9CA3AF;
+  --dashboard-header-input-focus: #00A3CF;
+  --dashboard-header-btn-bg: #00A3CF;
+  --dashboard-header-btn-text: #fff;
+
+    /* ...existing code... */
+  --client-card-bg: #223047;
+  --client-card-border: #334155;
+  --client-card-title: #fff;
+  --client-card-tag-bg: #334155;
+  --client-card-tag-text: #9CA3AF;
+  --client-card-status-healthy-bg: rgba(16,185,129,0.1);
+  --client-card-status-healthy-text: #10B981;
+  --client-card-status-risk-bg: rgba(245,158,11,0.1);
+  --client-card-status-risk-text: #F59E0B;
+  --client-card-status-poor-bg: rgba(239,68,68,0.1);
+  --client-card-status-poor-text: #EF4444;
+  --client-card-btn-bg: #223047;
+  --client-card-btn-border: #00A3CF;
+  --client-card-btn-text: #00A3CF;
+  --client-card-btn-hover-bg: rgba(0,163,207,0.08);
+  --client-card-metric-bg: #1e293b;
+}

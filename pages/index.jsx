@@ -1,9 +1,10 @@
 import React from 'react'
-import Register from '@/src/components/template/UserRegister'
+import Dashboard from './dashboard'
 export default function UserRegister() {
   return (
     <div>
-      <Register />
+      <Dashboard />
+      
     </div>
   )
 }

@@ -4,17 +4,33 @@ import {
   faOtter,
   faHouse,
   faFolder,
+  faHome,
+  faChartBar,
+  faCog,
   faGear,
   faMoon
 } from '@fortawesome/free-solid-svg-icons';
 import Heading from '../atoms/Heading/Heading';
 import Paragraph from '../atoms/Paragraph/Paragraph';
+import ThemeSwitcher from './ThemeSwitcher';
 
-const Sidebar = ({ darkMode }) => (
-  <div className={`fixed left-0 top-0 h-full w-64 shadow-soft flex flex-col z-10 transition-colors
-    ${darkMode ? 'bg-[#0d1a26] text-white' : 'bg-white text-text'}`}>
+const sidebarLinks = [
+  { icon: faHome, label: 'Home' },
+  { icon: faChartBar, label: 'Analytics' },
+  { icon: faCog, label: 'Settings' },
+];
+
+const Sidebar = ({activeIndex = 0, onLinkClick}) => (
+  <aside
+      className="fixed left-0 top-0 h-full w-64 shadow-soft flex flex-col z-10 transition-colors"
+      style={{
+        background: 'var(--sidebar-bg)',
+        color: 'var(--sidebar-text)',
+        borderRight: '1px solid var(--sidebar-hover-bg)',
+      }}
+    >
     {/* Logo and Branding */}
-    <div className={`p-6 border-b ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+    <div className={`p-6 border-b 'border-gray-200'}`}>
       <div className="flex items-center space-x-2">
         <div className="text-primary">
           <FontAwesomeIcon icon={faOtter} className="text-2xl" />
@@ -26,31 +42,48 @@ const Sidebar = ({ darkMode }) => (
       </div>
     </div>
     {/* Main Navigation */}
-    <nav className="flex-1 px-4 py-6">
-      <ul className="space-y-1">
-        <li>
-          <span className={`flex items-center px-4 py-3 rounded-lg cursor-pointer font-medium
-            ${darkMode ? 'bg-primary bg-opacity-20 text-primary' : 'bg-primary bg-opacity-10 text-primary'}`}>
-            <FontAwesomeIcon icon={faHouse} className="w-5 h-5 mr-3" />
-            Dashboard
-          </span>
-        </li>
-        <li>
-          <span className="flex items-center px-4 py-3 rounded-lg hover:bg-gray-100 cursor-pointer">
-            <FontAwesomeIcon icon={faFolder} className="w-5 h-5 mr-3" />
-            Lead Vault
-          </span>
-        </li>
-        <li>
-          <span className="flex items-center px-4 py-3 rounded-lg hover:bg-gray-100 cursor-pointer">
-            <FontAwesomeIcon icon={faGear} className="w-5 h-5 mr-3" />
-            Settings
-          </span>
-        </li>
-      </ul>
-    </nav>
+    <nav className="flex-1 p-4">
+        <ul>
+          {sidebarLinks.map((link, idx) => (
+            <li key={link.label} className="mb-2">
+              <button
+                className="cursor-pointer w-full flex items-center px-6 py-3 rounded-lg transition-colors font-medium"
+                style={{
+                  background:
+                    idx === activeIndex
+                      ? 'var(--sidebar-active-bg)'
+                      : 'var(--sidebar-bg)',
+                  color:
+                    idx === activeIndex
+                      ? 'var(--sidebar-active-text)'
+                      : 'var(--sidebar-text)',
+                }}
+                onClick={() => onLinkClick && onLinkClick(idx)}
+                onMouseOver={e => {
+                  if (idx !== activeIndex) {
+                    e.currentTarget.style.background = 'var(--sidebar-hover-bg)';
+                    e.currentTarget.style.color = 'var(--sidebar-hover-text)';
+                  }
+                }}
+                onMouseOut={e => {
+                  if (idx !== activeIndex) {
+                    e.currentTarget.style.background = 'var(--sidebar-bg)';
+                    e.currentTarget.style.color = 'var(--sidebar-text)';
+                  }
+                }}
+              >
+                <FontAwesomeIcon icon={link.icon} className="mr-3" />
+                {link.label}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    <div className="mt-auto p-4">
+      <ThemeSwitcher/>
+    </div>
     {/* Bottom Navigation */}
-    <div className={`p-4 border-t ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+    <div className={`p-4 border-t : 'border-gray-200'}`}>
       <div className="flex items-center justify-between mb-4">
         <button className="flex items-center text-secondary">
           <FontAwesomeIcon icon={faMoon} className="mr-2" />
@@ -67,7 +100,7 @@ const Sidebar = ({ darkMode }) => (
         <span className="text-primary cursor-pointer">Help</span>
       </div>
     </div>
-  </div>
+  </aside>
 );
 
 export default Sidebar;
