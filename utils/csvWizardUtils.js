@@ -1,0 +1,57 @@
+import axios from 'axios';
+
+const API = process.env.NEXT_PUBLIC_API_URL;
+
+// Parse CSV and return { rows, columns }
+export function parseCsvFile(file, onComplete, onError) {
+  import('papaparse').then(Papa => {
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        onComplete({
+          rows: results.data,
+          columns: results.meta.fields || []
+        });
+      },
+      error: onError
+    });
+  });
+}
+
+// Map CSV rows to selected columns
+export function mapCsvRowsToLeads(csvRows, selectedColumns) {
+  return csvRows.map(row => {
+    const lead = {};
+    selectedColumns.forEach(col => {
+      lead[col] = row[col] || "";
+    });
+    return lead;
+  });
+}
+
+// API call to process leads
+export async function processLeadsApi({ leads, parameters }) {
+  const res = await axios.post(`${API}/leads/process-leads`, {
+    leads,
+    parameters
+  });
+  return res;
+}
+
+// Reset wizard state
+export function resetWizard(setters) {
+  setters.setStep(1);
+  setters.setCsvFile(null);
+  setters.setCsvRows([]);
+  setters.setCsvColumns([]);
+  setters.setSelectedColumns([]);
+  setters.setUrlColumn("");
+  setters.setParameters([]);
+}
+
+// AI parameter generation using axios.post
+export async function generateAIParameters(description) {
+  const res = await axios.post(`${API}/leads/generate-parameters`, { description });
+  return res.data.parameters;
+}

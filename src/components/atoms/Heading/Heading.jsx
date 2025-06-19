@@ -1,23 +1,23 @@
 import PropTypes from 'prop-types'
 
-const Heading = ({ level, children, className }) => {
+const Heading = ({ level, children, className, style }) => {
 
     const HeadingTag = `h${level}`
 
     const getHeadingStyles = (level) => {
         switch (level) {
           case '1':
-            return 'text-5xl text-secondary';
+            return 'text-5xl';
           case '2':
-            return 'text-4xl text-blue';
+            return 'text-4xl';
           case '3':
-            return 'text-3xl text-red';
+            return 'text-3xl';
           case '4':
-            return 'text-2xl text-pink';
+            return 'text-2xl';
           case '5':
-            return 'text-xl text-secondary';
+            return 'text-xl';
           case '6':
-            return 'text-lg text-secondary';
+            return 'text-lg';
           default:
             return 'text-lg';
         }
@@ -26,7 +26,7 @@ const Heading = ({ level, children, className }) => {
     const headingStyles = getHeadingStyles(level)
 
   return (
-    <HeadingTag className={`${headingStyles} ${className}`}>{children}</HeadingTag>
+    <HeadingTag className={`${headingStyles} ${className}`} style={style}>{children}</HeadingTag>
   )
 }
 

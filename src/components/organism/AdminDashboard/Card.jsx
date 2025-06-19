@@ -26,7 +26,7 @@ const Card = ({
       <Heading
         level="6"
         className="text-sm font-medium"
-        style={{ color: 'var(--color-secondary)' }}
+        style={{ color: 'var(--card-title)' }}
       >
         {title}
       </Heading>

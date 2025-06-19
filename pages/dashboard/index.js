@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import Sidebar from '@/src/components/organism/Sidebar';
-import Dashboard from '@/src/components/organism/Dashboard';
+import Dashboard from '@/src/components/organism/AdminDashboard/Dashboard';
+import CsvWizard from '@/src/components/organism/UploadCSV/CsvWizard';
 
 const DashboardPage = () => {
-    const [darkMode, setDarkMode] = useState(false);
 
     return (
         <div>
-            <Sidebar darkMode={darkMode} />
-            <Dashboard darkMode={darkMode} />
+            {/* <CsvWizard/> */}
+            <Sidebar />
+            <Dashboard/>
         </div>
     );
 };

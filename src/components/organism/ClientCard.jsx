@@ -1,7 +1,13 @@
+import { useRouter } from 'next/router';
 import { getClientStatus } from '@/utils/clientStatus';
 
-export default function ClientCard({client}) {
+export default function ClientCard({ client }) {
   const status = getClientStatus(client.init_status);
+  const router = useRouter();
+
+  const handleOpenLeadsVault = () => {
+    router.push(`/leads-vault?clientId=${client._id}`);
+  };
 
   return (
     <div
@@ -19,7 +25,6 @@ export default function ClientCard({client}) {
               background: client.iconBg,
               color: client.iconColor,
             }}
-          
             src={client.logo}
           />
           <div>
@@ -55,7 +60,7 @@ export default function ClientCard({client}) {
           <p className="text-xs" style={{ color: 'var(--color-secondary)' }}>
             Leads This Week
           </p>
-          <p className="font-bold">{client.leadsThisWeek}</p>
+          <p className="font-bold" style={{ color: 'var(--color-black)' }}>{client.leadsThisWeek}</p>
         </div>
         <div
           className="p-2 rounded"
@@ -68,7 +73,7 @@ export default function ClientCard({client}) {
         </div>
       </div>
       <button
-        className="w-full text-sm border rounded-lg py-1.5"
+        className="cursor-pointer w-full text-sm border rounded-lg py-1.5"
         style={{
           background: 'var(--client-card-btn-bg)',
           borderColor: 'var(--client-card-btn-border)',
@@ -76,6 +81,8 @@ export default function ClientCard({client}) {
         }}
         onMouseOver={e => (e.currentTarget.style.background = 'var(--client-card-btn-hover-bg)')}
         onMouseOut={e => (e.currentTarget.style.background = 'var(--client-card-btn-bg)')}
+        onClick={handleOpenLeadsVault}
+
       >
         Open Leads Vault
       </button>

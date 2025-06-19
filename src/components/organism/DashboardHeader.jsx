@@ -3,7 +3,7 @@ import Heading from '../atoms/Heading/Heading'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch, faPlus } from '@fortawesome/free-solid-svg-icons'
 
-function DashboardHeader() {
+function DashboardHeader({title, btnText}) {
     return (
         <header className="mb-8">
             <div className="flex justify-between items-center">
@@ -12,7 +12,7 @@ function DashboardHeader() {
                     className="text-2xl font-bold"
                     style={{ color: 'var(--dashboard-header-title)' }}
                 >
-                    Dashboard Overview
+                    {title}
                 </Heading>
                 <div className="flex items-center space-x-4">
                     <div className="relative">
@@ -41,7 +41,7 @@ function DashboardHeader() {
                         }}
                     >
                         <FontAwesomeIcon icon={faPlus} className="mr-2" />
-                        New Upload
+                        {btnText}
                     </button>
                 </div>
             </div>

@@ -1,5 +1,5 @@
 export function getClientStatus(status) {
-  if (status === "healthy") {
+  if (status === "Healthy") {
     return {
       label: "✅ Healthy",
       bg: "var(--client-card-status-healthy-bg)",

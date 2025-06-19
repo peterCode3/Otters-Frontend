@@ -1,0 +1,77 @@
+import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faGrip,
+  faList,
+  faDownload,
+} from "@fortawesome/free-solid-svg-icons";
+
+export default function FilterBar({
+  filters = [],
+  values = {},
+  onChange = () => {},
+  className = "",
+  buttons = [
+    {
+      icon: faGrip,
+      label: "Grid",
+      onClick: () => {},
+      active: false,
+      className: "bg-white text-gray-500",
+    },
+    {
+      icon: faList,
+      label: "List",
+      onClick: () => {},
+      active: true,
+      className: "bg-primary text-white",
+    },
+    {
+      icon: faDownload,
+      label: "Export CSV",
+      onClick: () => {},
+      className: "text-gray-500 border border-gray-200 rounded-lg px-3 py-2 text-sm flex items-center ml-2",
+    },
+  ],
+}) {
+  return (
+    <div
+      className={`flex flex-wrap items-center gap-x-6 gap-y-4 bg-white shadow-soft rounded-xl px-6 py-4 ${className}`}
+    >
+      {filters.map((filter) => (
+        <div className="flex flex-col" key={filter.name}>
+          <label className="text-xs font-medium text-secondary mb-1">
+            {filter.label}
+          </label>
+          <select
+            className="border border-gray-200 rounded-lg py-1.5 px-4 text-sm focus:ring-primary focus:outline-none bg-background"
+            value={values[filter.name] || ""}
+            onChange={(e) => onChange(filter.name, e.target.value)}
+          >
+            {filter.options.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      ))}
+      <div className="flex items-center space-x-4 ml-auto">
+        {buttons.map((btn, idx) => (
+          <button
+            key={btn.label || idx}
+            className={`px-3 py-2 text-sm rounded-lg flex items-center transition-colors
+              ${btn.active ? "bg-primary text-white" : ""}
+              ${btn.className || ""}
+            `}
+            onClick={btn.onClick}
+            type="button"
+          >
+            <FontAwesomeIcon icon={btn.icon} className={btn.label ? "mr-2" : ""} />
+            {btn.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
