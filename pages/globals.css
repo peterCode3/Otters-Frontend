@@ -20,6 +20,7 @@ body {
   --color-black: #00263D;
   --color-text: #00263D;
   --color-secondary: #6B7280;
+  --text-secondry-black: #6B7280;
   --color-primary: #00A3CF;
   --color-success: #10B981;
   --color-warning: #F59E0B;
@@ -124,6 +125,11 @@ body {
   --table-danger: #EF4444;
   --table-info: #2563eb;
   --table-tag-bg: #f3f4f6;
+
+    --avatar-bg: #e6f6fa; /* matches bg-primary/10 */
+
+  /* comment modals */
+  --comment-header-bg : #DFEBF7
 }
 
 [data-theme="dark"] {
@@ -139,6 +145,7 @@ body {
   --color-info: #2563EB;
   --body-background: #0d1a26;
   --text-secondary: #fff;
+  --text-secondry-black: #1e293b;
 
   /* Sidebar unique colors (dark) */
   --sidebar-bg: #1e293b;
@@ -232,4 +239,12 @@ body {
   --table-danger: #EF4444;
   --table-info: #60a5fa;
   --table-tag-bg: #232b3b;
+
+    --avatar-bg: #073642; /* or any dark variant you prefer */
+
+
+
+  /* comment modals */
+  --comment-header-bg : #181F2A
+
 }

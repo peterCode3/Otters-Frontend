@@ -14,24 +14,24 @@ export default function FilterBar({
   buttons = [
     {
       icon: faGrip,
-      label: "Grid",
+      label: "",
       onClick: () => {},
       active: false,
-      className: "bg-white text-gray-500",
+      className: "text-gray-500",
     },
     {
       icon: faList,
-      label: "List",
+      label: "",
       onClick: () => {},
       active: true,
       className: "bg-primary text-white",
     },
-    {
-      icon: faDownload,
-      label: "Export CSV",
-      onClick: () => {},
-      className: "text-gray-500 border border-gray-200 rounded-lg px-3 py-2 text-sm flex items-center ml-2",
-    },
+    // {
+    //   icon: faDownload,
+    //   label: "Export CSV",
+    //   onClick: () => {},
+    //   className: "text-gray-500 border border-gray-200 rounded-lg px-3 py-2 text-sm flex items-center ml-2",
+    // },
   ],
 }) {
   return (
@@ -56,12 +56,13 @@ export default function FilterBar({
           </select>
         </div>
       ))}
-      <div className="flex items-center space-x-4 ml-auto">
+      {buttons && (
+        <div className="flex items-center ml-auto border border-gray-200 rounded-lg overflow-hidden">
         {buttons.map((btn, idx) => (
           <button
             key={btn.label || idx}
-            className={`px-3 py-2 text-sm rounded-lg flex items-center transition-colors
-              ${btn.active ? "bg-primary text-white" : ""}
+            className={`cursor-pointer px-3 py-2 text-sm flex items-center transition-colors
+              ${btn.active ? "bg-[var(--color-primary)] text-white" : ""}
               ${btn.className || ""}
             `}
             onClick={btn.onClick}
@@ -71,7 +72,9 @@ export default function FilterBar({
             {btn.label}
           </button>
         ))}
+        
       </div>
+      )}
     </div>
   );
 }

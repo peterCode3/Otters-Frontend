@@ -6,24 +6,27 @@ import UnqualifiedLeadsCard from './UnqualifiedLeadsCard';
 import LeadQualityTrendsCard from './LeadQualityTrendsCard';
 import ManualReviewQueue from './ManualReviewQueue';
 import EmptyClientsState from './EmptyClientsState';
-import { fetchLeadQualityTrends } from '@/utils/leadApi';
-import {fetchClients} from '@/utils/clientApi';
+import { fetchClients } from '@/utils/clientApi';
 import LoadingDashboard from './LoadingDashboard';
+import Popup from '../Popup';
+import { getAllUsers } from '@/utils/userApi';
+import CsvWizard from '../UploadCSV/CsvWizard';
+import { fetchUnqualifiedLeadsSummary } from '@/utils/leadApi';
 
-
-export default function Dashboard() {
+export default function Dashboard({ clientId = 'all' }) {
   const [chartData, setChartData] = useState([]);
   const [clients, setClients] = useState([]);
+  const [user, setUser] = useState([]);
+  const [summary, setSummary] = useState({ total: 0, reasons: [] });
+
   const [loading, setLoading] = useState(false);
-  const reasons = [
-    { label: "Budget too low", percent: 42, colorVar: "--unqualified-primary" },
-    { label: "Wrong region", percent: 28, colorVar: "--unqualified-blue" },
-    { label: "Vague intent", percent: 30, colorVar: "--unqualified-purple" },
-  ];
+  const [openCsv, setOpenCsv] = useState(false);
 
   useEffect(() => {
     setLoading(true)
-    fetchLeadQualityTrends().then(setChartData);
+    getAllUsers().then(users => {
+      setUser(users);
+    });
     fetchClients().then((data) => {
       if (data.length === 0) {
         setClients([]);
@@ -31,19 +34,24 @@ export default function Dashboard() {
         setClients(data);
       }
     });
-    setTimeout(function(){
+    fetchUnqualifiedLeadsSummary(clientId).then(setSummary);
+
+    setTimeout(function () {
       setLoading(false)
     }, 3000)
-  }, []);
+  }, [clientId]);
 
-  
+
   if (loading) {
-    return <LoadingDashboard/>
-  }else if (clients.length === 0) {
+    return <LoadingDashboard />
+  } else if (clients.length === 0) {
     return (
       <div className="ml-64 p-8 min-h-screen transition-colors bg-[var(--body-background)] text-text">
-        <DashboardHeader title='Dashboard View' btnText='New Upload'/>
+        <DashboardHeader title='Dashboard View' btnText='New Upload' onButtonClick={() => setOpenCsv(true)} />
         <EmptyClientsState />
+        <Popup open={openCsv} onClose={() => setOpenCsv(false)}>
+          <CsvWizard />
+        </Popup>
       </div>
     );
   }
@@ -52,18 +60,24 @@ export default function Dashboard() {
   return (
     <div className="ml-64 p-8 min-h-screen transition-colors bg-[var(--body-background)] text-text">
       {/* Header */}
-      <DashboardHeader title='Dashboard View' btnText='New Upload'/>
+      <DashboardHeader title='Dashboard View' btnText='New Upload' onButtonClick={() => setOpenCsv(true)} />
       <DashboardKpis />
       <div className='grid grid-cols-3 gap-6'>
         <ClientManagement />
-        <UnqualifiedLeadsCard total={384} reasons={reasons} />
+        <UnqualifiedLeadsCard
+          total={summary.total}
+          reasons={summary.reasons}
+        />        
         <LeadQualityTrendsCard
-          chartData={chartData}
           targetScore={7.0}
           showAnomaly={true}
+          clients={user}
         />
         <ManualReviewQueue />
       </div>
+      <Popup open={openCsv} onClose={() => setOpenCsv(false)}>
+        <CsvWizard />
+      </Popup>
     </div>
   );
 }

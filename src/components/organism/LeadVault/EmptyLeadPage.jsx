@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import Sidebar from "../Sidebar";
 import DashboardHeader from "../DashboardHeader";
 import FilterBar from "./FilterBar";
-
-import { faGrip, faList, faDownload } from "@fortawesome/free-solid-svg-icons"; 
+import Popup from "../Popup";
+import CsvWizard from "../UploadCSV/CsvWizard";
+import { faGrip, faList, faDownload } from "@fortawesome/free-solid-svg-icons";
 
 const filterOptions = [
     {
@@ -53,7 +54,7 @@ const filterOptions = [
 
 export default function EmptyLeadPage() {
     const [filterValues, setFilterValues] = useState({});
-
+    const [openCsv, setOpenCsv] = useState(false);
     const handleFilterChange = (name, value) => {
         setFilterValues((prev) => ({ ...prev, [name]: value }));
         // Optionally, trigger a fetch for filtered leads here
@@ -68,7 +69,7 @@ export default function EmptyLeadPage() {
                 {/* Main Content */}
                 <main className="ml-64 p-8 flex-1">
                     {/* Header */}
-                    <DashboardHeader title='Leads Vault' btnText='Import CSV' />
+                    <DashboardHeader title='Leads Vault' btnText='Import CSV' onButtonClick={() => setOpenCsv(true)} />
                     {/* Toolbar */}
                     <FilterBar
                         filters={filterOptions}
@@ -190,6 +191,9 @@ export default function EmptyLeadPage() {
                         </div>
                     </div>
                 </main>
+                <Popup open={openCsv} onClose={() => setOpenCsv(false)}>
+                    <CsvWizard />
+                </Popup>
             </div>
             {/* Shimmer CSS */}
             <style jsx global>{`

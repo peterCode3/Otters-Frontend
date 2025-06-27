@@ -6,7 +6,6 @@ import {
   faWandMagicSparkles,
 } from '@fortawesome/free-solid-svg-icons';
 
-
 const defaultOptions = [
   {
     name: "Fintech",
@@ -42,7 +41,6 @@ export default function StepParameters({
     if (parameters.length === 0) {
       setParameters([{ name: "", condition: "" }]);
     }
-    // eslint-disable-next-line
   }, []);
 
   const addParameter = () => {
@@ -84,9 +82,10 @@ export default function StepParameters({
   const getPreview = (text) => {
     if (!text) return "";
     const words = text.split(" ");
-    if (words.length <= 2) return text;
-    return words.slice(0, 2).join(" ") + " ...more";
+    if (words.length <= 12) return text;
+    return words.slice(0, 12).join(" ") + " ...more";
   };
+
 
   return (
     <>
@@ -96,7 +95,7 @@ export default function StepParameters({
           className="flex items-center gap-2 px-3 py-1.5 rounded bg-primary/10 text-primary font-medium"
           onClick={() => setShowAI(true)}
         >
-        <FontAwesomeIcon icon={faWandMagicSparkles} />
+          <FontAwesomeIcon icon={faWandMagicSparkles} />
 
           AI parameter assistant
         </button>
@@ -111,9 +110,14 @@ export default function StepParameters({
               onChange={e => handleSelect(idx, e.target.value)}
             >
               <option value="">Select or enter parameter</option>
-              {defaultOptions.map(opt => (
-                <option key={opt.name} value={opt.name}>{opt.name}</option>
-              ))}
+              {[...defaultOptions, ...parameters]
+                .filter((opt, index, self) =>
+                  index === self.findIndex(o => o.name === opt.name)
+                )
+                .map(opt => (
+                  <option key={opt.name} value={opt.name}>{opt.name}</option>
+                ))}
+
             </select>
           </div>
           <div className="flex-1">
@@ -152,7 +156,7 @@ export default function StepParameters({
             disabled={parameters.length === 1}
             title={parameters.length === 1 ? "At least one parameter required" : "Delete parameter"}
           >
-<FontAwesomeIcon icon={faXmark} />
+            <FontAwesomeIcon icon={faXmark} />
           </button>
         </div>
       ))}

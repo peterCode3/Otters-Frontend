@@ -15,7 +15,7 @@ export default function NotifyForm({
     secondaryButtonClass = "w-full border border-primary text-primary font-medium py-3 rounded-lg",
 }) {
     return (
-        <div className="min-h-screen flex items-center justify-center bg-background text-text p-4">
+        <div className="min-h-screen flex items-center justify-center text-text p-4">
             <div className="w-full max-w-md">
                 <div className="bg-white rounded-xl shadow-soft boxshadow-soft p-8 md:p-10 text-center">
                     {title && (
@@ -37,10 +37,10 @@ export default function NotifyForm({
                     {subDescription && (
                         <p className="text-secondary text-sm mb-6">{subDescription}</p>
                     )}
-                    <button className={primaryButtonClass} onClick={onPrimary}>
+                    <button className={primaryButtonClass} style={{background: 'var(--color-primary)'}} onClick={onPrimary}>
                         {primaryButtonText}
                     </button>
-                    <button className={secondaryButtonClass} onClick={onSecondary}>
+                    <button className={`${secondaryButtonClass}, cursor-pointer`} onClick={onSecondary}>
                         {secondaryButtonText}
                     </button>
                 </div>

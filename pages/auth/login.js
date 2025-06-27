@@ -122,6 +122,8 @@ export default function LoginPage() {
           placeholder: "••••••••",
           required: true,
           disabled: false,
+          sublabellink: "/auth/forget-password",
+          sublabel: "Forgot Password?",
           icon: faLock,
           hasToggle: true,
           showPassword: showPassword,

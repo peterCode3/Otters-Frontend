@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Paragraph from '@/src/components/atoms/Paragraph/Paragraph';
 import Heading from '@/src/components/atoms/Heading/Heading';
 import '@/styles/auth.css'
+import Link from 'next/link';
 
 export default function AuthForm({
   title,
@@ -16,12 +17,13 @@ export default function AuthForm({
   bottomText,
   bottomLinkText,
   onBottomLink,
+  pas_sublabel,
   children, // For any extra custom content
 }) {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background text-text p-4">
+    <div className="min-h-screen flex items-center justify-center text-text p-4">
       <div className="w-full max-w-md">
-        <div className="bg-white rounded-xl shadow-soft boxshadow-soft p-8 md:p-10">
+        <div className="bg-white rounded-xl relative shadow-soft boxshadow-soft p-8 md:p-10">
           <div className="flex justify-center mb-6">
             <div className="flex items-center">
               <span className="text-xl font-bold">OTTERS IQ™</span>
@@ -79,6 +81,7 @@ export default function AuthForm({
                       rows={3}
                     />
                   ) : (
+                    <>
                     <input
                       type={field.type === 'password' && field.showPassword !== undefined
                         ? (field.showPassword ? 'text' : 'password')
@@ -93,6 +96,8 @@ export default function AuthForm({
                       autoComplete={field.autoComplete}
                       name={field.name}
                     />
+                    
+                    </>
                   )}
                   {field.hasToggle && (
                     <button
@@ -107,8 +112,17 @@ export default function AuthForm({
                   )}
                 </div>
                 {errors[field.name] && (
+                  <>
                   <Paragraph className="text-sm text-red-500 mt-1">{errors[field.name]}</Paragraph>
+                  {field.sublabel && (
+                    <div className='relative'>
+                      <Link className='absolute -top-5 right-0' href={field.sublabellink}>{field.sublabel}</Link>
+                    </div>
+                  )}
+                  </>
+                  
                 )}
+                
               </div>
             ))}
 

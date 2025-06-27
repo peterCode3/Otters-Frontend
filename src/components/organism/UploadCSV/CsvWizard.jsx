@@ -31,9 +31,17 @@ export default function CsvWizard() {
 
   // Process list (send to backend)
   const handleProcess = async () => {
-    setProcessing(true);
+     setProcessing(true);
+
     const leads = mapCsvRowsToLeads(csvRows, selectedType === "all" ? selectedColumns : [urlColumn]);
-    const res = await processLeadsApi({ leads, parameters });
+
+    const res = await processLeadsApi({
+      leads,
+      parameters,
+      form_version: 'formVersion',
+      scoring_profile_id: 'scoringProfileId'
+    });
+
     setProcessing(false);
     if (res.status === 200) {
       alert("Leads processed successfully!");
@@ -50,9 +58,10 @@ export default function CsvWizard() {
       alert("Error processing leads.");
     }
   };
+  
 
   return (
-    <div className="w-full max-w-4xl mx-auto my-10 bg-white rounded-2xl shadow-soft p-8">
+    <div className="w-full max-w-xl mx-auto my-10 bg-white rounded-2xl shadow-soft p-8">
       <div className="flex mb-8">
         {["Upload CSV", "Select Columns", "Set Parameters"].map((label, idx) => (
           <div key={label} className="flex-1 flex flex-col items-center">

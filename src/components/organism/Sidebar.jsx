@@ -6,7 +6,8 @@ import {
   faHome,
   faChartBar,
   faCog,
-  faMoon
+  faMoon,
+  faUser
 } from '@fortawesome/free-solid-svg-icons';
 import Heading from '../atoms/Heading/Heading';
 import Paragraph from '../atoms/Paragraph/Paragraph';
@@ -18,6 +19,10 @@ import { getCurrentUser } from '@/utils/userApi';
 const sidebarLinks = [
   { icon: faHome, label: 'Home', link: '/' },
   { icon: faChartBar, label: 'Leads Vault', link: '/leads-vault' },
+  { icon: faChartBar, label: 'Archive Leads', link: '/archive-leads' },
+  
+  { icon: faUser, label: 'All User', link: '/users' },
+  { icon: faUser, label: 'All Rols', link: '/role' },
   { icon: faCog, label: 'Settings', link: '/settings' },
 ];
 
@@ -28,9 +33,9 @@ const Sidebar = () => {
   useEffect(() => {
     // Fetch current user for logo
     getCurrentUser()
-      .then(data => setUser(data)) 
+      .then(data => setUser(data))
       .catch(() => setUser(null));
-      
+
   }, []);
 
   return (
@@ -88,20 +93,22 @@ const Sidebar = () => {
             <span>Dark Mode</span>
           </button>
           <div className="relative">
-            {user && user.logo ? (
-              <img
-                src={user.logo}
-                alt="User"
-                className="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center object-cover"
-                style={{ border: '2px solid var(--color-primary)' }}
-              />
-            ) : (
-              <div className="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold">
-                {user && user.username
-                  ? user.username.charAt(0).toUpperCase()
-                  : ''}
-              </div>
-            )}
+            <Link href="/profile">
+              {user && user.logo ? (
+                <img
+                  src={user.logo}
+                  alt="User"
+                  className="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center object-cover"
+                  style={{ border: '2px solid var(--color-primary)' }}
+                />
+              ) : (
+                <div className="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-bold">
+                  {user && user.username
+                    ? user.username.charAt(0).toUpperCase()
+                    : ''}
+                </div>
+              )}
+            </Link>
           </div>
         </div>
         <div className="flex items-center justify-between text-xs text-secondary">

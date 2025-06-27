@@ -16,10 +16,12 @@ export default function StepUpload({ csvFile, setCsvFile, onCsvParsed, onNext })
           setCsvFile(file);
           onCsvParsed(rows, columns);
         },
+
         () => alert("Failed to parse CSV")
       );
     });
   };
+  
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[350px]">
