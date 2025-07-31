@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import AuthForm from '@/src/components/template/AuthForm';
 import { faEnvelope, faLock, faEye, faEyeSlash, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 import NotifyForm from '@/src/components/template/NotifyForm';
+import { getCurrentUser } from '@/utils/userApi';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -20,6 +21,24 @@ export default function LoginPage() {
   const [notifySubDesc, setNotifySubDesc] = useState('');
 
   useEffect(() => {
+
+   const publicPaths = ['/']; 
+
+    async function checkAuth() {
+      try {
+        const user = await getCurrentUser();
+        if (!publicPaths.includes(router.pathname)) {
+          router.replace('/');
+        }
+      } catch (error) {
+        console.warn('User not authenticated');
+
+        
+      }
+    }
+
+    checkAuth();
+
     let interval;
     if (loading && timer > 0) {
       interval = setInterval(() => setTimer(prev => prev - 1), 1000);

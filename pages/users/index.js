@@ -4,6 +4,8 @@ import UsersTable from '@/src/components/organism/AdminDashboard/UsersTable'
 import DashboardHeader from '@/src/components/organism/DashboardHeader'
 import Popup from '@/src/components/organism/Popup'
 import AddNewClient from '@/src/components/organism/AddNewClient'
+import withAuthorization from '@/utils/withAuthorization'
+
 function index() {
   const [open, setOpen] = useState(false);
 
@@ -25,4 +27,4 @@ function index() {
   )
 }
 
-export default index
+export default withAuthorization(index, 'view_users')

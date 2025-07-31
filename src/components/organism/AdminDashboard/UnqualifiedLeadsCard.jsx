@@ -14,17 +14,24 @@ export default function UnqualifiedLeadsCard({ total, reasons }) {
   // Resolve color variables to real colors
   const chartColors = reasons.map(r => getCssVarValue(r.colorVar));
 
+  // Resolve colors upfront for both chart and legend
+  const reasonsWithColors = reasons.map((r) => ({
+    ...r,
+    resolvedColor: getCssVarValue(r.colorVar),
+  }));
+
   const data = {
-    labels: reasons.map(r => r.label),
+    labels: reasonsWithColors.map(r => r.label),
     datasets: [
       {
-        data: reasons.map(r => r.percent),
-        backgroundColor: chartColors,
+        data: reasonsWithColors.map(r => r.percent),
+        backgroundColor: reasonsWithColors.map(r => r.resolvedColor),
         borderWidth: 0,
       },
     ],
   };
 
+  
   const options = {
     cutout: "70%",
     plugins: {
@@ -47,7 +54,7 @@ export default function UnqualifiedLeadsCard({ total, reasons }) {
         </div>
       </div>
       <div className="h-60 flex items-center justify-center mb-4" style={{ width: 341, height: 240 }}>
-          <Doughnut data={data} options={options} />
+        <Doughnut data={data} options={options} />
       </div>
       <div className="mt-4">
         {reasons.map((reason) => (
@@ -57,9 +64,9 @@ export default function UnqualifiedLeadsCard({ total, reasons }) {
                 className="w-3 h-3 rounded-full mr-2"
                 style={{ background: `var(${reason.colorVar})` }}
               ></div>
-              <span className="text-sm" style={{color: 'var(--color-black)'}}>{reason.label}</span>
+              <span className="text-sm" style={{ color: 'var(--color-black)' }}>{reason.label}</span>
             </div>
-            <span className="font-medium" style={{color: 'var(--color-black)'}}>{reason.percent}%</span>
+            <span className="font-medium" style={{ color: 'var(--color-black)' }}>{reason.percent}%</span>
           </div>
         ))}
       </div>

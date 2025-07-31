@@ -21,7 +21,7 @@ export default function ThemeSwitcher() {
   return (
     <select
       onChange={changeTheme}
-      className="select select-bordered w-full max-w-xs"
+      className="select select-bordered w-full max-w-xs bg-[var(--sidebar-bg)]"
       value={theme}
     >
       <option value="light">Light</option>

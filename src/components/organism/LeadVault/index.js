@@ -3,6 +3,7 @@ import LeadsTable from "./LeadsTable";
 import FilterBar from "./FilterBar";
 import { fetchClientsById } from "@/utils/clientApi";
 import LeadHeader from "./LeadHeader";
+import { fetchArchiveLeadByClientId } from "@/utils/archiveleadApi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faGrip,
@@ -55,22 +56,41 @@ const filterOptions = [
     },
 ];
 
-export default function LeadVaultPage({ clientId, leads: propLeads, onFilterChange }) {
+export default function LeadVaultPage({ description, clientId, leads: propLeads, apiSource = ('leads'), ArchiveActionText }) {
     const [filterValues, setFilterValues] = useState({});
     const [client, setClient] = useState(null);
     const [view, setView] = useState('list');
-
-
+    const [filteredLeads, setFilteredLeads] = useState(propLeads);
+    const [page, setPage] = useState(1)
+    const [total, setTotal] = useState('');
+    const pageSize = 20;
     useEffect(() => {
         if (clientId) {
             fetchClientsById(clientId).then((clientData) => setClient(clientData));
         }
     }, [clientId]);
 
+
+    useEffect(() => {
+        if (apiSource === 'archive') {
+            (async function fetchFilteredLeads() {
+                const data = await fetchArchiveLeadByClientId(clientId, page, pageSize, filterValues);
+                console.log('total aya h nae', data.total)
+                setFilteredLeads(data.leads || []);
+                setTotal(data.total);
+            })();
+        }
+    }, [filterValues, apiSource, clientId, page]);
+
+
+
     const handleFilterChange = (name, value) => {
         setFilterValues((prev) => ({ ...prev, [name]: value }));
-        onFilterChange?.(name, value);
     };
+    const handleResetFilters = () => {
+        setFilterValues({});
+    };
+
 
 
     return (
@@ -86,6 +106,7 @@ export default function LeadVaultPage({ clientId, leads: propLeads, onFilterChan
                             filters={filterOptions}
                             values={filterValues}
                             onChange={handleFilterChange}
+                            className="mb-4 gap-x-6 gap-y-4 bg-white shadow-soft rounded-xl px-6 py-4"
                             buttons={[
                                 {
                                     icon: faGrip,
@@ -107,7 +128,17 @@ export default function LeadVaultPage({ clientId, leads: propLeads, onFilterChan
 
                 />
             )}
-            <LeadsTable clientId={clientId} filters={filterValues} leads={propLeads} view={view} setView={setView} />
+            <LeadsTable
+                description={description}
+                page = {page}
+                setPage={setPage}
+                clientId={clientId}
+                Archivetotal= {total}
+                filters={filterValues} 
+                ResetFilter={handleResetFilters} 
+                leads={filteredLeads} view={view} 
+                setView={setView} 
+                ArchiveActionText={ArchiveActionText} />
         </section>
     );
 }

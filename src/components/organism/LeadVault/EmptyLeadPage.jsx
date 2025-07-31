@@ -75,6 +75,7 @@ export default function EmptyLeadPage() {
                         filters={filterOptions}
                         values={filterValues}
                         onChange={handleFilterChange}
+                        className="mb-4 gap-x-6 gap-y-4 bg-white shadow-soft rounded-xl px-6 py-4"
                         buttons={[
                             {
                                 icon: faGrip,

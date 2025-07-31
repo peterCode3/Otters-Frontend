@@ -17,6 +17,8 @@ import {
   deleteCurrentUser,
   resetCurrentUserPassword
 } from '@/utils/userApi';
+import { toast } from 'react-toastify';
+import LogoutButton from '@/src/components/organism/LogoutButton';
 
 const detailFields = [
   { key: 'status', label: 'Status', icon: faInfoCircle },
@@ -45,7 +47,7 @@ const IconStyle = { background: 'var(--bg-light-primary)', color: 'var(--color-p
 
   const handleUpdate = async () => {
     if (!form.username || !form.email) {
-      alert('Username and Email are required.');
+      toast.error('Username and Email are required.');
       return;
     }
     setLoading(true);
@@ -53,8 +55,9 @@ const IconStyle = { background: 'var(--bg-light-primary)', color: 'var(--color-p
       const data = await updateCurrentUser(form);
       setUser(data);
       setEdit(false);
+      toast.success('Profile Update Successfully')
     } catch (e) {
-      alert(e.response?.data?.message || 'Update failed');
+      toast.error(e.response?.data?.message || 'Update failed');
     }
     setLoading(false);
   };
@@ -64,10 +67,10 @@ const IconStyle = { background: 'var(--bg-light-primary)', color: 'var(--color-p
     setLoading(true);
     try {
       await deleteCurrentUser();
-      alert('Account deleted');
+      toast.success('Account deleted');
       window.location.href = '/auth/login';
     } catch (e) {
-      alert(e.response?.data?.message || 'Delete failed');
+      toast.error(e.response?.data?.message || 'Delete failed');
     }
     setLoading(false);
   };
@@ -76,10 +79,10 @@ const IconStyle = { background: 'var(--bg-light-primary)', color: 'var(--color-p
     setLoading(true);
     try {
       await resetCurrentUserPassword(passwords);
-      alert('Password updated');
+      toast.success('Password updated');
       setPasswords({ oldPassword: '', newPassword: '' });
     } catch (e) {
-      alert(e.response?.data?.message || 'Password reset failed');
+      toast.error(e.response?.data?.message || 'Password reset failed');
     }
     setLoading(false);
   };
@@ -88,9 +91,9 @@ const IconStyle = { background: 'var(--bg-light-primary)', color: 'var(--color-p
 
   return (
     <div className="min-h-screen bg-[#f6f7fb] flex items-center justify-center py-10">
-      <div className="flex gap-8 w-full max-w-5xl">
+      <div className="flex gap-8 w-full max-w-5xl relative">
         {/* Profile Card */}
-        <div className="flex-1 bg-white rounded-2xl shadow-lg p-8 flex flex-col items-center">
+        <div className="flex-1 bg-white rounded-2xl shadow-lg p-8 flex flex-col items-center relative">
           <img
             src={user.logo || '/default-avatar.png'}
             alt="User Logo"
@@ -160,7 +163,7 @@ const IconStyle = { background: 'var(--bg-light-primary)', color: 'var(--color-p
                 </div>
               </>
             )}
-            <div className="flex gap-3 mt-4">
+            <div className="flex gap-3 mt-4 absolute bottom-[40px] items-center w-full">
               {edit ? (
                 <>
                   <button
@@ -194,6 +197,7 @@ const IconStyle = { background: 'var(--bg-light-primary)', color: 'var(--color-p
                   >
                     <FontAwesomeIcon icon={faTrash} /> Delete
                   </button>
+                  <LogoutButton/>
                 </>
               )}
             </div>

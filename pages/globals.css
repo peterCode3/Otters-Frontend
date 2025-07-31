@@ -129,7 +129,14 @@ body {
     --avatar-bg: #e6f6fa; /* matches bg-primary/10 */
 
   /* comment modals */
-  --comment-header-bg : #DFEBF7
+  --comment-header-bg : #DFEBF7;
+
+  /* Unqualified area */
+
+  --unqualified-budget : #00A1CB;
+  --unqualified-region: #59A1F8;
+  --unqualified-intent: #AF8DF9;
+  --unqualified-other: #00A1CB;
 }
 
 [data-theme="dark"] {

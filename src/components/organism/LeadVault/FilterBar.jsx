@@ -12,20 +12,20 @@ export default function FilterBar({
   onChange = () => {},
   className = "",
   buttons = [
-    {
-      icon: faGrip,
-      label: "",
-      onClick: () => {},
-      active: false,
-      className: "text-gray-500",
-    },
-    {
-      icon: faList,
-      label: "",
-      onClick: () => {},
-      active: true,
-      className: "bg-primary text-white",
-    },
+    // {
+    //   icon: faGrip,
+    //   label: "",
+    //   onClick: () => {},
+    //   active: false,
+    //   className: "text-gray-500",
+    // },
+    // {
+    //   icon: faList,
+    //   label: "",
+    //   onClick: () => {},
+    //   active: true,
+    //   className: "bg-primary text-white",
+    // },
     // {
     //   icon: faDownload,
     //   label: "Export CSV",
@@ -36,7 +36,7 @@ export default function FilterBar({
 }) {
   return (
     <div
-      className={`flex flex-wrap items-center gap-x-6 gap-y-4 bg-white shadow-soft rounded-xl px-6 py-4 ${className}`}
+      className={`flex flex-wrap items-center ${className}`}
     >
       {filters.map((filter) => (
         <div className="flex flex-col" key={filter.name}>

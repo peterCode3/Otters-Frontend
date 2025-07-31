@@ -1,14 +1,19 @@
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import AuthForm from '@/src/components/template/AuthForm';
-import { faUserShield, faUser, faList } from '@fortawesome/free-solid-svg-icons';
-import {
-  createRole,
-  getRoles,
-  assignRole,
-  getUsers,
-} from '@/services/authService';
+import { faUserShield } from '@fortawesome/free-solid-svg-icons';
+import { createRole, getRoles } from '@/services/authService';
 import { toast } from 'react-toastify';
+
+const availablePermissions = [
+  "view_leads",
+  "view_archive_leads",
+  "view_users",
+  "view_roles",
+  "user_dashboard",
+  "delete_leads",
+  "register_user",
+  "admin_dashboard"
+];
 
 export default function CreateRole() {
   const [loading, setLoading] = useState(false);
@@ -17,47 +22,33 @@ export default function CreateRole() {
   const [roles, setRoles] = useState([]);
   const [form, setForm] = useState({
     name: '',
-    permissions: '',
-    userId: '',
-    roleId: '',
+    permissions: [],
   });
-  const [globalError, setGlobalError] = useState(''); // <-- Add this
+  const [globalError, setGlobalError] = useState('');
 
-
-  // Handle input changes
   const handleChange = (name, value) => setForm(f => ({ ...f, [name]: value }));
 
-  // Create Role
   const handleCreateRole = async (e) => {
     e.preventDefault();
     setLoading(true);
     setErrors({});
     setGlobalError('');
     try {
-      await createRole({
-        name: form.name,
-        permissions: form.permissions
-          ? form.permissions.split(',').map(p => p.trim())
-          : [],
-      });
-      setForm(f => ({ ...f, name: '', permissions: '' }));
+      await createRole(form);
+      setForm({ name: '', permissions: [] });
       setTimer(2);
       getRoles().then(res => setRoles(res.data));
       toast.success('Role created successfully!');
-      setTimeout(() => {
-        setLoading(false);
-      }, 3000);
+      setTimeout(() => setLoading(false), 3000);
     } catch (err) {
       const errorMsg = err.response?.data?.message || err.message;
       setErrors({ form: errorMsg });
       setGlobalError(errorMsg);
-      toast.error(errorMsg); 
+      toast.error(errorMsg);
       setLoading(false);
     }
   };
 
-
-  // Fields for create role
   const createRoleFields = [
     {
       name: 'name',
@@ -71,15 +62,20 @@ export default function CreateRole() {
     },
     {
       name: 'permissions',
-      label: 'Permissions (comma separated)',
-      type: 'text',
+      label: 'Select Permissions',
+      type: 'checkbox-group',
       value: form.permissions,
-      onChange: e => handleChange('permissions', e.target.value),
-      icon: faList,
-      placeholder: 'e.g. read,write,delete',
+      onToggle: (permission) => {
+        setForm(f => ({
+          ...f,
+          permissions: f.permissions.includes(permission)
+            ? f.permissions.filter(p => p !== permission)
+            : [...f.permissions, permission],
+        }));
+      },
+      options: availablePermissions.map(p => ({ label: p, value: p })),
     },
   ];
-
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center text-text p-4">

@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
   faChevronRight,
-  faDownload,
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function DynamicTable({
@@ -16,7 +15,8 @@ export default function DynamicTable({
   title = "Data Table",
   extraButtons,
   extrabuttonOnClcik,
-  extrabuttonicon
+  extrabuttonicon,
+  loading = false,
 }) {
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState([]);
@@ -86,55 +86,27 @@ export default function DynamicTable({
             </tr>
           </thead>
           <tbody>
-            {paginatedRows.map((row) => (
-              <tr
-                key={row.id || row._id}
-                className="transition group"
-                style={{
-                  background: "var(--table-bg)",
-                  borderBottom: "1px solid var(--table-border)",
-                }}
-              >
-                {selectable && (
-                  <td className="px-4 py-5 align-middle">
-                    <input
-                    className="cursor-pointer"
-                      type="checkbox"
-                      checked={selected.includes(row.id || row._id)}
-                      onChange={() => handleSelect(row.id || row._id)}
-                    />
-                  </td>
-                )}
-                {columns.map((col) => (
-                  <td key={col.key} className="px-6 py-5 align-middle">
-                    {col.render
-                      ? col.render(row[col.key], row)
-                      : row[col.key]}
-                  </td>
-                ))}
-                {rowActions.length > 0 && (
-                  <td className="cursor-pointer  px-6 py-5 align-middle text-center space-x-2">
-                    {rowActions.map((action, index) => (
-                      <button
-                        key={index}
-                        title={action.title}
-                        onClick={() => action.onClick(row)}
-                        className="text-sm"
-                        style={{
-                          color: action.color || "var(--table-primary)",
-                          background: "transparent",
-                          borderRadius: "9999px",
-                          padding: "0.5rem",
-                        }}
-                      >
-                      {action.icon && <FontAwesomeIcon icon={action.icon} className="mr-2" />}
-                      </button>
-                    ))}
-                  </td>
-                )}
-              </tr>
-            ))}
-            {paginatedRows.length === 0 && (
+            {loading ? (
+              [...Array(pageSize)].map((_, index) => (
+                <tr key={index} className="animate-pulse border-b" style={{ background: "var(--table-bg)" }}>
+                  {selectable && <td className="px-4 py-5"><div className="h-4 bg-gray-300 rounded w-4 mx-auto" /></td>}
+                  {columns.map((_, colIdx) => (
+                    <td key={colIdx} className="px-6 py-5">
+                      <div className="h-4 bg-gray-300 rounded w-full"></div>
+                    </td>
+                  ))}
+                  {rowActions.length > 0 && (
+                    <td className="px-6 py-5 text-center">
+                      <div className="flex justify-center gap-2">
+                        {[...Array(rowActions.length)].map((_, i) => (
+                          <div key={i} className="cursor-pointer h-4 w-4 bg-gray-300 rounded-full" />
+                        ))}
+                      </div>
+                    </td>
+                  )}
+                </tr>
+              ))
+            ) : paginatedRows.length === 0 ? (
               <tr>
                 <td
                   colSpan={columns.length + (selectable ? 1 : 0) + (rowActions.length > 0 ? 1 : 0)}
@@ -144,15 +116,63 @@ export default function DynamicTable({
                   No data found.
                 </td>
               </tr>
+            ) : (
+              paginatedRows.map((row) => (
+                <tr
+                  key={row.id || row._id}
+                  className="transition group"
+                  style={{
+                    background: "var(--table-bg)",
+                    borderBottom: "1px solid var(--table-border)",
+                  }}
+                >
+                  {selectable && (
+                    <td className="px-4 py-5 align-middle">
+                      <input
+                        className="cursor-pointer"
+                        type="checkbox"
+                        checked={selected.includes(row.id || row._id)}
+                        onChange={() => handleSelect(row.id || row._id)}
+                      />
+                    </td>
+                  )}
+                  {columns.map((col) => (
+                    <td key={col.key} className="px-6 py-5 align-middle">
+                      {col.render ? col.render(row[col.key], row) : row[col.key]}
+                    </td>
+                  ))}
+                  {rowActions.length > 0 && (
+                    <td className=" px-6 py-5 align-middle text-center space-x-2">
+                      {rowActions.map((action, index) => (
+                        <button
+                          key={index}
+                          title={action.title}
+                          onClick={() => action.onClick(row)}
+                          className="cursor-pointer text-sm"
+                          style={{
+                            color: action.color || "var(--table-primary)",
+                            background: "transparent",
+                            borderRadius: "9999px",
+                            padding: "0.5rem",
+                          }}
+                        >
+                          {action.icon && (
+                            <FontAwesomeIcon icon={action.icon} className="mr-2" />
+                          )}
+                        </button>
+                      ))}
+                    </td>
+                  )}
+                </tr>
+              ))
             )}
           </tbody>
         </table>
       </div>
 
       {/* Bulk Actions */}
-      
       {selectable && selected.length > 0 ? (
-        <div className=" px-6 py-4 flex items-center justify-between">
+        <div className="px-6 py-4 flex items-center justify-between">
           <div className="text-sm text-text font-medium">
             {selected.length} selected
           </div>
@@ -160,7 +180,7 @@ export default function DynamicTable({
             {bulkActions.map((action, index) => (
               <button
                 key={index}
-                className="cursor-pointer  border rounded-lg px-3 py-2 text-sm"
+                className="cursor-pointer border rounded-lg px-3 py-2 text-sm"
                 style={{
                   color: "var(--table-secondary-text)",
                   borderColor: "var(--table-border)",
@@ -174,12 +194,11 @@ export default function DynamicTable({
             ))}
           </div>
         </div>
-      ) : ( 
-        extraButtons  &&  (
-        <div className="px-6 py-4 flex items-center justify-between">
-          <div className="text-sm text-text font-medium">
-          </div>
-          <div className="flex gap-2">
+      ) : (
+        extraButtons && (
+          <div className="px-6 py-4 flex items-center justify-between">
+            <div className="text-sm text-text font-medium"></div>
+            <div className="flex gap-2">
               <button
                 className="cursor-pointer border rounded-lg px-3 py-2 text-sm"
                 style={{
@@ -192,10 +211,10 @@ export default function DynamicTable({
                 <FontAwesomeIcon icon={extrabuttonicon} className="mr-2" />
                 {extraButtons}
               </button>
+            </div>
           </div>
-          </div>
-          )
-      )} 
+        )
+      )}
 
       {/* Pagination */}
       <div
@@ -206,8 +225,7 @@ export default function DynamicTable({
         }}
       >
         <div className="text-sm" style={{ color: "var(--table-secondary-text)" }}>
-          Showing {(page - 1) * pageSize + 1}–
-          {Math.min(page * pageSize, rows.length)} of {rows.length}
+          Showing {(page - 1) * pageSize + 1}–{Math.min(page * pageSize, rows.length)} of {rows.length}
         </div>
         <div className="flex space-x-2">
           <button

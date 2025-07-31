@@ -16,15 +16,17 @@ import Link from 'next/link';
 const API = process.env.NEXT_PUBLIC_API_URL;
 import { getCurrentUser } from '@/utils/userApi';
 
-const sidebarLinks = [
-  { icon: faHome, label: 'Home', link: '/' },
-  { icon: faChartBar, label: 'Leads Vault', link: '/leads-vault' },
-  { icon: faChartBar, label: 'Archive Leads', link: '/archive-leads' },
-  
-  { icon: faUser, label: 'All User', link: '/users' },
-  { icon: faUser, label: 'All Rols', link: '/role' },
-  { icon: faCog, label: 'Settings', link: '/settings' },
-];
+
+
+// view_leads
+// view_archive_leads
+// view_users
+// view_roles
+// user_dashboard
+// delete_leads
+// register_user
+// view_archive_leads
+
 
 const Sidebar = () => {
   const router = useRouter();
@@ -36,7 +38,22 @@ const Sidebar = () => {
       .then(data => setUser(data))
       .catch(() => setUser(null));
 
+    console.log(user, 'ai h')
+
   }, []);
+
+  
+const sidebarLinks = [
+  { icon: faHome, label: 'Home', link: '/', permission:'admin_dashboard' },
+  { icon: faHome, label: 'Home', link: '/user-dashboard', permission:'user_dashboard' },
+  { icon: faChartBar, label: 'Leads Vault', link: '/leads-vault', permission: 'view_leads' },
+  { icon: faChartBar, label: 'Archive Leads', link: '/archive-leads', permission: 'view_archive_leads' },
+  { icon: faChartBar, label: 'Recycle Bin', link: '/recycle-bin', permission: 'delete_leads' },
+  { icon: faUser, label: 'All User', link: '/users', permission: 'view_users' },
+  { icon: faUser, label: 'All Roles', link: '/role', permission: 'view_roles' },
+  { icon: faCog, label: 'Settings', link: '/settings', permission: 'settings' },
+];
+
 
   return (
     <aside
@@ -62,25 +79,25 @@ const Sidebar = () => {
       {/* Main Navigation */}
       <nav className="flex-1 p-4">
         <ul>
-          {sidebarLinks.map((link) => {
-            const isActive = router.pathname === link.link;
-            return (
-              <li key={link.label} className="mb-2">
-                <Link href={link.link || "#"}
-                  className={
-                    `w-full flex items-center px-6 py-3 rounded-lg transition-colors font-medium group
-                      ${isActive
-                      ? 'bg-[var(--bg-light-primary)] text-[var(--sidebar-active-text)]'
-                      : 'bg-[var(--sidebar-bg)] text-[var(--sidebar-text)] hover:bg-[var(--sidebar-hover-bg)] hover:text-[var(--sidebar-hover-text)]'}`
-                  }
-                >
-                  <FontAwesomeIcon icon={link.icon} className="mr-3" />
-                  {link.label}
-                </Link>
-              </li>
-            );
-          })}
+          {sidebarLinks
+            .filter(link => !link.permission || (user?.permissions?.includes(link.permission)))
+            .map(link => {
+              const isActive = router.pathname === link.link;
+              return (
+                <li key={link.label} className="mb-2">
+                  <Link href={link.link}
+                    className={`w-full flex items-center px-6 py-3 rounded-lg transition-colors font-medium group
+              ${isActive
+                        ? 'bg-[var(--bg-light-primary)] text-[var(--sidebar-active-text)]'
+                        : 'bg-[var(--sidebar-bg)] text-[var(--sidebar-text)] hover:bg-[var(--sidebar-hover-bg)] hover:text-[var(--sidebar-hover-text)]'}`}>
+                    <FontAwesomeIcon icon={link.icon} className="mr-3" />
+                    {link.label}
+                  </Link>
+                </li>
+              );
+            })}
         </ul>
+
       </nav>
       <div className="mt-auto p-4">
         <ThemeSwitcher />

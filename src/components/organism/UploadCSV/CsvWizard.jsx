@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import StepUpload from "./StepUpload";
 import StepColumns from "./StepColumns";
 import StepParameters from "./StepParameters";
+import { useRouter } from 'next/router';
 import {
   mapCsvRowsToLeads,
   processLeadsApi,
   resetWizard
 } from "@/utils/csvWizardUtils";
+import { toast } from "react-toastify";
 
 export default function CsvWizard() {
   const [step, setStep] = useState(1);
@@ -18,6 +20,9 @@ export default function CsvWizard() {
   const [urlColumn, setUrlColumn] = useState("");
   const [parameters, setParameters] = useState([]);
   const [processing, setProcessing] = useState(false);
+  const [useCustomParams, setUseCustomParams] = useState(false);
+
+  const router = useRouter();
 
   // Step navigation
   const next = () => setStep((s) => s + 1);
@@ -29,36 +34,31 @@ export default function CsvWizard() {
     setCsvColumns(columns);
   };
 
+
   // Process list (send to backend)
   const handleProcess = async () => {
-     setProcessing(true);
-
+    setProcessing(true);
     const leads = mapCsvRowsToLeads(csvRows, selectedType === "all" ? selectedColumns : [urlColumn]);
 
     const res = await processLeadsApi({
       leads,
-      parameters,
+      parameters: useCustomParams ? parameters : [],
+      use_custom_criteria: useCustomParams,
       form_version: 'formVersion',
       scoring_profile_id: 'scoringProfileId'
     });
 
     setProcessing(false);
     if (res.status === 200) {
-      alert("Leads processed successfully!");
-      resetWizard({
-        setStep,
-        setCsvFile,
-        setCsvRows,
-        setCsvColumns,
-        setSelectedColumns,
-        setUrlColumn,
-        setParameters
-      });
+      toast.success("Leads processed successfully!");
+      setTimeout(() => router.push('/leads-vault'), 3000);
+      resetWizard({ setStep, setCsvFile, setCsvRows, setCsvColumns, setSelectedColumns, setUrlColumn, setParameters });
     } else {
-      alert("Error processing leads.");
+      toast.error("Error processing leads.");
     }
   };
-  
+
+
 
   return (
     <div className="w-full max-w-xl mx-auto my-10 bg-white rounded-2xl shadow-soft p-8">
@@ -81,14 +81,19 @@ export default function CsvWizard() {
       {step === 2 && (
         <StepColumns
           columns={csvColumns}
-          selectedType={selectedType}
-          setSelectedType={setSelectedType}
           selectedColumns={selectedColumns}
           setSelectedColumns={setSelectedColumns}
-          urlColumn={urlColumn}
-          setUrlColumn={setUrlColumn}
+          useCustomParams={useCustomParams}
+          setUseCustomParams={setUseCustomParams}
           onPrev={prev}
-          onNext={next}
+          onNext={() => {
+            if (useCustomParams) {
+              next(); // Step 3
+            } else {
+              handleProcess(); // Immediate processing
+            }
+          }}
+          processing={processing}
         />
       )}
       {step === 3 && (

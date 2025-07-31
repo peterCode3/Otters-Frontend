@@ -3,16 +3,17 @@ import NotifyForm from '../../template/NotifyForm'
 import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 
 
-function ArchivedNotifiy({onAction, onclose, description}) {
+function ArchivedNotifiy({onAction, onclose,heading='Archive Lead(s)?', description, 
+    subDescription = 'You can still access them from archived records.', primaryButtonText ='Archive Lead(s)'}) {
     return (
         <NotifyForm
             icon={faTriangleExclamation}
-            heading="Archive Lead(s)?"
+            heading={heading}
             title="Confirmation"
             description={description}
-            subDescription="You can still access them from archived records."
+            subDescription={subDescription}
             primaryButtonClass='cursor-pointer w-full hover:bg-primary/90 text-white font-medium py-3 rounded-lg mb-3'
-            primaryButtonText="Archive Lead(s)"
+            primaryButtonText={primaryButtonText}
             onPrimary={onAction}
             secondaryButtonClass='cursor-pointer w-full border border-primary text-primary font-medium py-3 rounded-lg'
             secondaryButtonText="Cancel"

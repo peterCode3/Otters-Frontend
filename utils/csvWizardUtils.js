@@ -19,26 +19,70 @@ export function parseCsvFile(file, onComplete, onError) {
   });
 }
 
-export function mapCsvRowsToLeads(csvRows, selectedColumns) {
-  return csvRows.map(row => {
-    const lead = {};
+// export function mapCsvRowsToLeads(csvRows, selectedColumns) {
+//   return csvRows.map(row => {
+//     const lead = {};
 
-    selectedColumns.forEach(col => {
-      lead[col] = row[col] || "";
+//     selectedColumns.forEach(col => {
+//       lead[col] = row[col] || "";
+//     });
+
+//     const nameAliases = ["name", "Full Name", "full name", "full-name", "company name", "business", "company"];
+//     const emailAliases = ["email", "Email", "e-mail", "contact_email"];
+
+//     const fallbackName = nameAliases.find(k => row[k]) || "Unknown";
+//     const fallbackEmail = emailAliases.find(k => row[k]) || "";
+
+//     lead.name = row[fallbackName] || "Unknown";
+//     lead.email = row[fallbackEmail] || "";
+
+//     return lead;
+//   });
+// }
+
+export function mapCsvRowsToLeads(csvRows) {
+  return csvRows.map(row => {
+    const lead = { ...row }; // 🟢 Include all original columns
+
+    // Normalize all keys to lowercase for alias lookup
+    const normalizedRow = {};
+    Object.keys(row).forEach(key => {
+      normalizedRow[key.toLowerCase()] = row[key];
     });
 
-    const nameAliases = ["name", "full name", "company name", "business", "company"];
-    const emailAliases = ["email", "Email", "e-mail", "contact_email"];
+    // Fallback name detection
+    const nameAliases = [
+      "name",
+      "full name",
+      "company name",
+      "business",
+      "company",
+      "first name",
+      "last name"
+    ];
 
-    const fallbackName = nameAliases.find(k => row[k]) || "Unknown";
-    const fallbackEmail = emailAliases.find(k => row[k]) || "";
+    let name =
+      nameAliases.find(k => normalizedRow[k]) &&
+      normalizedRow[nameAliases.find(k => normalizedRow[k])];
 
-    lead.name = row[fallbackName] || "Unknown";
-    lead.email = row[fallbackEmail] || "";
+    // Try to combine first + last name if present
+    if (!name && (normalizedRow["first name"] || normalizedRow["last name"])) {
+      name = `${normalizedRow["first name"] || ""} ${normalizedRow["last name"] || ""}`.trim();
+    }
+
+    // Fallback email detection
+    const emailAliases = ["email", "e-mail", "contact_email"];
+    let email =
+      emailAliases.find(k => normalizedRow[k]) &&
+      normalizedRow[emailAliases.find(k => normalizedRow[k])];
+
+    lead.name = name || "Unknown";
+    lead.email = email || "";
 
     return lead;
   });
 }
+
 
 
 // API call to process leads

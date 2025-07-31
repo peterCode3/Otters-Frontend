@@ -9,6 +9,7 @@ import { useRouter } from 'next/router'
 import { getCurrentUser } from '@/utils/userApi'
 import Popup from '@/src/components/organism/Popup'
 import CsvWizard from '@/src/components/organism/UploadCSV/CsvWizard'
+import withAuthorization from '@/utils/withAuthorization'
 
 function Index() {
   const [clientIdState, setClientIdState] = React.useState(null)
@@ -19,17 +20,20 @@ function Index() {
   const { clientId } = router.query;
   const [openCsv, setOpenCsv] = useState(false);
   const [filters, setFilters] = useState({});
+  const [page, setPage] = useState(1);
+  const pageSize = 20;
 
 
   useEffect(() => {
     async function resolveClientId() {
       setLoading(true);
       try {
-        const idToUse = clientId || (await getCurrentUser())._id;
+        const idToUse = clientId || (await getCurrentUser()).id;
         setClientIdState(idToUse);
-        const data = await fetchArchiveLeadByClientId(idToUse, 1, 5, filters);
+        const data = await fetchArchiveLeadByClientId(idToUse, page, pageSize, filters);
         setClient(data.client);
         setLeads(data.leads || []);
+        setTotal(data.total)
       } catch {
         setClient(null);
         setLeads([]);
@@ -40,6 +44,7 @@ function Index() {
     resolveClientId();
   }, [clientId, filters]);
 
+  
   if (loading) return <div><EmptyLeadPage /></div>
 
   return (
@@ -48,11 +53,15 @@ function Index() {
       <DashboardHeader title='Archive Leads Vault' btnText='Import CSV' onButtonClick={() => setOpenCsv(true)} />
       <LeadVaultPage
         clientId={clientIdState}
+        description="Are you sure you want to restore lead(s)?"
         leads={leads}
-        onFilterChange={(name, value) =>
-          setFilters((prev) => ({ ...prev, [name]: value }))
-        }
+        apiSource="archive"
+        ArchiveActionText="Restore Archived"
+        page={page}
+        setPage={setPage}
+        pageSize={pageSize}
       />
+
       <Popup open={openCsv} onClose={() => setOpenCsv(false)}>
         <CsvWizard />
       </Popup>
@@ -60,4 +69,4 @@ function Index() {
   )
 }
 
-export default Index
+export default withAuthorization (Index, 'view_archive_leads')

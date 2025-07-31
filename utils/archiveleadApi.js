@@ -1,21 +1,21 @@
-import axios from 'axios';
 
-const API = process.env.NEXT_PUBLIC_API_URL;
+import apiClient from './apiClient';
+
 
 export const fetchArchiveLeadByClientId = async (id, page = 1, pageSize = 5, filters = {}) => {
   const params = { page, pageSize, ...filters };
-  const res = await axios.get(`${API}/archive_lead/client/${id}`, { params, withCredentials: true });
+  const res = await apiClient.get(`/archive_lead/client/${id}`, { params });
   return res.data;
 };
 
 export const archiveLead = (id) =>
-  axios.post(`${API}/archive_lead/${id}`, {}, { withCredentials: true });
+  apiClient.post(`/archive_lead/${id}`, {});
 
 export const deleteArchivedLead = (leadId) =>
-  axios.delete(`${API}/archive_lead/by-lead/${leadId}`, { withCredentials: true });
+  apiClient.delete(`/archive_lead/by-lead/${leadId}`);
 
 export const fetchLeadByMeId = (id) =>
-  axios.get(`${API}/lead/me/${id}`, { withCredentials: true }).then(res => res.data);
+  apiClient.get(`/lead/me/${id}`).then(res => res.data);
 
 export const fetchArchiveLeadByMeId = (id) =>
-  axios.get(`${API}/archive_lead/${id}`, { withCredentials: true }).then(res => res.data);
+  apiClient.get(`/archive_lead/${id}`).then(res => res.data);

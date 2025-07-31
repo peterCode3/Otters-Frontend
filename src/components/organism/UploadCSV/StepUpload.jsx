@@ -51,7 +51,7 @@ export default function StepUpload({ csvFile, setCsvFile, onCsvParsed, onNext })
         <div className="mt-4 text-green-600">{csvFile.name} uploaded</div>
       )}
       <button
-        className="mt-8 w-full bg-blue-200 text-blue-900 font-semibold py-3 rounded-lg disabled:opacity-50"
+        className="cursor-pointer mt-8 w-full bg-blue-200 text-blue-900 font-semibold py-3 rounded-lg disabled:opacity-50"
         disabled={!csvFile}
         onClick={onNext}
       >

@@ -1,97 +1,90 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 export default function StepColumns({
-  columns,
-  selectedType,
-  setSelectedType,
+  columns = [],
   selectedColumns,
   setSelectedColumns,
-  urlColumn,
-  setUrlColumn,
+  useCustomParams,
+  setUseCustomParams,
   onPrev,
-  onNext
+  onNext,
+  processing // 🔹 Add processing prop
 }) {
-  const handleColumnToggle = (col) => {
-    setSelectedColumns(prev =>
-      prev.includes(col) ? prev.filter(c => c !== col) : [...prev, col]
+  useEffect(() => {
+    if (!selectedColumns || selectedColumns.length === 0) {
+      setSelectedColumns(columns);
+    }
+  }, [columns, selectedColumns, setSelectedColumns]);
+
+  const toggleColumn = (col) => {
+    setSelectedColumns((prev) =>
+      prev.includes(col) ? prev.filter((c) => c !== col) : [...prev, col]
     );
   };
 
-  // Auto-select all columns if "all data ready" is chosen
-  React.useEffect(() => {
-    if (selectedType === "all") setSelectedColumns(columns);
-    else setSelectedColumns([]);
-  }, [selectedType, columns, setSelectedColumns]);
+  const handleToggleChange = () => {
+    setUseCustomParams(!useCustomParams);
+  };
+
+  const handleContinue = () => {
+    if (!processing) onNext();
+  };
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4">Select correct columns in CSV</h2>
-      <div className="mb-6">
-        <label className="flex items-center gap-2 cursor-pointer">
-          <input
-            type="radio"
-            checked={selectedType === "urls"}
-            onChange={() => setSelectedType("urls")}
-          />
-          <span>A file with company URLs to be qualified</span>
+    <div className="bg-background text-text p-6 rounded-xl shadow-soft">
+      <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+        <i className="fa-solid fa-table text-primary" />
+        Select CSV Columns
+      </h2>
+
+      <div className="flex items-center justify-between mb-6">
+        <label className="text-sm font-medium text-gray-700">
+          Use custom qualification parameters?
         </label>
-        <label className="flex items-center gap-2 cursor-pointer mt-2">
-          <input
-            type="radio"
-            checked={selectedType === "all"}
-            onChange={() => setSelectedType("all")}
-          />
-          <span>
-            A file with all data ready for analysis and qualification
-            <div className="text-xs text-gray-500">
-              Select this if your file already includes all the static data needed for qualification.
-            </div>
-          </span>
-        </label>
+        <input
+          type="checkbox"
+          className="w-5 h-5"
+          checked={useCustomParams}
+          onChange={handleToggleChange}
+        />
       </div>
-      {selectedType === "urls" && (
-        <div className="mb-8">
-          <label className="block mb-2 font-medium">Company URL</label>
-          <select
-            className="w-full border rounded-lg px-4 py-2"
-            value={urlColumn}
-            onChange={e => setUrlColumn(e.target.value)}
-          >
-            <option value="">Select Column</option>
-            {columns.map(col => (
-              <option key={col} value={col}>{col}</option>
-            ))}
-          </select>
-        </div>
-      )}
-      {selectedType === "all" && (
-        <div className="mb-8">
-          <label className="block mb-2 font-medium">Select columns to be processed</label>
-          <div className="grid grid-cols-2 gap-2">
-            {columns.map(col => (
-              <label key={col} className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={selectedColumns.includes(col)}
-                  onChange={() => handleColumnToggle(col)}
-                />
-                <span>{col}</span>
-              </label>
-            ))}
-          </div>
-        </div>
-      )}
-      <div className="w-full flex justify-between gap-3 mt-8">
-        <button className="rounded-lg px-6 py-3 font-semibold bg-gray-100 text-secondary hover:bg-gray-200 transition" onClick={onPrev}>Back</button>
+
+      <p className="text-sm text-secondary mb-6">
+        By default, all columns are selected for processing. You can uncheck any columns you want to exclude.
+      </p>
+
+      <div className="grid grid-cols-2 gap-3 mb-8">
+        {columns.map((col, idx) => (
+          <label key={idx} className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={selectedColumns.includes(col)}
+              onChange={() => toggleColumn(col)}
+              className="accent-primary"
+            />
+            <span>{col}</span>
+          </label>
+        ))}
+      </div>
+
+      <div className="w-full flex justify-between mt-8">
         <button
-          className="rounded-lg px-6 py-3 font-semibold text-white bg-primary hover:bg-primary/90 transition disabled:opacity-50"
-          disabled={
-            (selectedType === "urls" && !urlColumn) ||
-            (selectedType === "all" && selectedColumns.length === 0)
-          }
-          onClick={onNext}
+          className="cursor-pointer rounded-lg px-6 py-3 font-semibold bg-gray-100 text-secondary hover:bg-gray-200 transition"
+          onClick={onPrev}
         >
-          Next
+          Back
+        </button>
+
+        <button
+          className="cursor-pointer rounded-lg px-6 py-3 font-semibold text-white bg-primary hover:bg-primary/90 transition disabled:opacity-50"
+          onClick={handleContinue}
+          disabled={processing}
+        >
+          {processing
+            ? "Processing..."
+            : useCustomParams
+            ? "Next: Set Parameters →"
+            : "Process List"}
         </button>
       </div>
     </div>

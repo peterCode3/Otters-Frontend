@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { fetchManualReviewLeads } from "@/utils/leadApi";
+import { fetchManualReviewLeads, deleteLead } from "@/utils/leadApi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight, faEye, faPencil, faBoxArchive, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-
+import LeadDetailsModal from "../LeadVault/leadview/LeadDetailsModal";
+import { toast } from "react-toastify";
+import Link from "next/link";
 export default function ManualReviewQueue() {
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -10,6 +12,14 @@ export default function ManualReviewQueue() {
   const pageSize = 8;
   const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
+  const [selectedLeadId, setSelectedLeadId] = useState(null);
+
+  const handleDelete = async (id) => {
+    await deleteLead(id);
+    toast.success('Delete Successfully')
+    setLeads((prev) => prev.filter((lead) => lead._id !== id));
+    setSelected((prev) => prev.filter((sid) => sid !== id));
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -62,7 +72,7 @@ export default function ManualReviewQueue() {
               leads.map(lead => (
                 <tr key={lead._id} className="border-b hover:bg-gray-50 dark:hover:bg-gray-800" style={{ borderColor: "#F3F4F6" }}>
                   <td className="py-3 px-4">
-                    <div className="flex items-center">
+                    <div className="cursor-pointer flex items-center" onClick={() => setSelectedLeadId(lead._id)}>
                       <FontAwesomeIcon icon={faChevronRight} className="text-xs mr-2 text-gray-400" />
                       <span>{lead.name}</span>
                     </div>
@@ -70,12 +80,19 @@ export default function ManualReviewQueue() {
                   <td className="py-3 px-4">{lead.client_id?.username || "—"}</td>
                   <td className="py-3 px-4">
                     <span
-                      className="px-2 py-0.5 rounded-full"
                       style={{
-                        background: "var(--review-warning)",
-                        opacity: 0.1,
-                        color: "var(--review-warning)",
-                        fontWeight: 500,
+                        background:
+                          lead.iq_score >= 7
+                            ? "var(--table-success)"
+                            : lead.iq_score >= 5
+                              ? "var(--table-warning)"
+                              : "var(--table-danger)",
+                        color: "#fff",
+                        padding: "0.25rem 0.75rem",
+                        borderRadius: "9999px",
+                        fontWeight: 600,
+                        fontSize: "0.75rem",
+                        display: "inline-block",
                       }}
                     >
                       {lead.iq_score}
@@ -84,13 +101,13 @@ export default function ManualReviewQueue() {
                   <td className="py-3 px-4">{lead.flag_reason || "—"}</td>
                   <td className="py-3 px-4">
                     <div className="flex space-x-2">
-                      <button className="text-primary hover:text-[var(--review-primary-dark)]">
+                      <button onClick={() => setSelectedLeadId(lead._id)} className="cursor-pointer text-primary hover:text-[var(--review-primary-dark)]">
                         <FontAwesomeIcon icon={faEye} />
                       </button>
                       <button className="text-secondary hover:text-gray-700">
                         <FontAwesomeIcon icon={faPencil} />
                       </button>
-                      <button className="text-secondary hover:text-gray-700">
+                      <button onClick={() => handleDelete(lead._id)} className="cursor-pointer text-secondary hover:text-gray-700">
                         <FontAwesomeIcon icon={faBoxArchive} />
                       </button>
                     </div>
@@ -103,8 +120,10 @@ export default function ManualReviewQueue() {
       </div>
       <div className="flex justify-between items-center mt-4">
         <button className="text-sm text-primary flex items-center">
-          <FontAwesomeIcon icon={faEye} className="mr-1" />
-          View All Leads
+          <Link href='leads-voault'>
+            <FontAwesomeIcon icon={faEye} className="mr-1" />
+            View All Leads
+          </Link>
         </button>
         <div className="flex space-x-2">
           <button
@@ -132,6 +151,12 @@ export default function ManualReviewQueue() {
           </button>
         </div>
       </div>
+
+      <LeadDetailsModal
+        leadId={selectedLeadId}
+        open={!!selectedLeadId}
+        onClose={() => setSelectedLeadId(null)}
+      />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import {
   faXmark,
   faWandMagicSparkles,
 } from '@fortawesome/free-solid-svg-icons';
+import { toast } from "react-toastify";
 
 const defaultOptions = [
   {
@@ -35,7 +36,7 @@ export default function StepParameters({
   const [showAI, setShowAI] = useState(false);
   const [aiDesc, setAIDesc] = useState("");
   const [showFull, setShowFull] = useState({});
-
+  const [genreating, setGenreating] = useState(false);
   // Always show at least one parameter field
   React.useEffect(() => {
     if (parameters.length === 0) {
@@ -72,10 +73,17 @@ export default function StepParameters({
   };
 
   const handleAIGenerate = async () => {
-    const params = await generateAIParameters(aiDesc);
-    setParameters(params && params.length > 0 ? params : [{ name: "", condition: "" }]);
-    setShowAI(false);
-    setAIDesc("");
+    setGenreating(true);
+    try{
+        const params = await generateAIParameters(aiDesc);
+        setParameters(params && params.length > 0 ? params : [{ name: "", condition: "" }]);
+        setShowAI(false);
+        setAIDesc("");
+        toast.success("Generate Parameters Success")
+    }catch{
+      setGenreating(false);
+      toast.error("Generate Parameters Errors")
+    }
   };
 
   // Helper to get preview of condition (first two words)
@@ -151,7 +159,7 @@ export default function StepParameters({
             </div>
           </div>
           <button
-            className="text-danger mt-7"
+            className="cursor-pointer text-danger mt-7"
             onClick={() => removeParameter(idx)}
             disabled={parameters.length === 1}
             title={parameters.length === 1 ? "At least one parameter required" : "Delete parameter"}
@@ -162,7 +170,7 @@ export default function StepParameters({
       ))}
 
       <button
-        className="mt-2 mb-6 px-4 py-2 rounded border border-primary text-primary font-medium"
+        className="cursor-pointer mt-2 mb-6 px-4 py-2 rounded border border-primary text-primary font-medium"
         disabled={parameters.length >= 3}
         onClick={addParameter}
       >
@@ -171,7 +179,7 @@ export default function StepParameters({
       <div className="w-full flex justify-between gap-3 mt-8">
         <button className="rounded-lg px-6 py-3 font-semibold bg-gray-100 text-secondary hover:bg-gray-200 transition" onClick={onPrev}>Back</button>
         <button
-          className="rounded-lg px-6 py-3 font-semibold text-white bg-primary hover:bg-primary/90 transition"
+          className="cursor-pointer rounded-lg px-6 py-3 font-semibold text-white bg-primary hover:bg-primary/90 transition"
           onClick={onProcess}
           disabled={processing}
         >
@@ -183,7 +191,7 @@ export default function StepParameters({
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
           <div className="bg-white rounded-2xl shadow p-8 w-full max-w-lg relative">
             <button
-              className="absolute top-4 right-4 text-secondary"
+              className="cursor-pointer absolute top-4 right-4 text-secondary"
               onClick={() => setShowAI(false)}
             >
               <span className="text-xl">✕</span>
@@ -202,11 +210,11 @@ export default function StepParameters({
             <div className="flex justify-end gap-3">
               <button className="rounded-lg px-6 py-3 font-semibold bg-gray-100 text-secondary hover:bg-gray-200 transition" onClick={() => setShowAI(false)}>Cancel</button>
               <button
-                className="rounded-lg px-6 py-3 font-semibold text-white bg-primary hover:bg-primary/90 transition disabled:opacity-50"
+                className="cursor-pointer rounded-lg px-6 py-3 font-semibold text-white bg-primary hover:bg-primary/90 transition disabled:opacity-50"
                 disabled={!aiDesc}
                 onClick={handleAIGenerate}
               >
-                Generate Parameters
+              {genreating ? "Genreating..." : "Generate Parameters"}
               </button>
             </div>
           </div>

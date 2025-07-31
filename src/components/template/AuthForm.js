@@ -20,30 +20,34 @@ export default function AuthForm({
   pas_sublabel,
   children, // For any extra custom content
 }) {
+
+  const color = 'var(--color-black)';
+
   return (
     <div className="min-h-screen flex items-center justify-center text-text p-4">
       <div className="w-full max-w-md">
         <div className="bg-white rounded-xl relative shadow-soft boxshadow-soft p-8 md:p-10">
           <div className="flex justify-center mb-6">
             <div className="flex items-center">
-              <span className="text-xl font-bold">OTTERS IQ™</span>
+              <span className="text-xl font-bold text-white" style={{ color }}>OTTERS IQ™</span>
             </div>
           </div>
           {title && (
-            <Heading className="text-2xl font-bold mb-2 text-center" level='4'>{title}</Heading>
+            <Heading className="text-2xl font-bold mb-2 text-center" style={{ color }} level='4'>{title}</Heading>
           )}
           {subtitle && (
-            <Paragraph className="text-secondary text-sm mb-6 text-center">{subtitle}</Paragraph>
+            <Paragraph className="text-secondary text-sm mb-6 text-center" >{subtitle}</Paragraph>
           )}
           <form onSubmit={onSubmit}>
             {fields.map((field, idx) => (
               <div className="mb-5" key={field.name || idx}>
                 {field.label && (
-                  <label className="block text-sm font-medium mb-2">{field.label}</label>
+                  <label className="block text-sm font-medium mb-2" style={{ color }}>{field.label}</label>
                 )}
                 <div className="relative">
                   {field.icon && (
-                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400" >
+                      
                       <FontAwesomeIcon icon={field.icon} />
                     </span>
                   )}
@@ -56,9 +60,12 @@ export default function AuthForm({
                       required={field.required}
                       disabled={loading || field.disabled}
                       name={field.name}
+                      style={{ color }}
                     >
                       {field.options.map(opt => (
-                        <option key={opt.value} value={opt.value}>{opt.label}</option>
+                        <option key={opt.value} value={opt.value}
+                        style={{ color }}
+                        >{opt.label}</option>
                       ))}
                     </select>
                   ) : field.type === "file" ? (
@@ -69,6 +76,7 @@ export default function AuthForm({
                       className={`w-full ${field.icon ? 'pl-10' : 'pl-4'} pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary outline-none`}
                       disabled={loading || field.disabled}
                       name={field.name}
+                      style={{ color }}
                     />
                   ) : field.type === "textarea" ? (
                     <textarea
@@ -78,25 +86,42 @@ export default function AuthForm({
                       className={`w-full ${field.icon ? 'pl-10' : 'pl-4'} pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary outline-none resize-none`}
                       disabled={loading || field.disabled}
                       name={field.name}
+                      style={{ color }}
                       rows={3}
                     />
+                  ) : field.type === "checkbox-group" ? (
+                    <div className="space-y-2">
+                      {field.options.map(option => (
+                        <label key={option.value} className="cursor-pointer flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            style={{ color }}
+                            checked={field.value.includes(option.value)}
+                            onChange={() => field.onToggle(option.value)}
+                            className="accent-[var(--color-primary)]"
+                          />
+                          <span style={{ color }}>{option.label}</span>
+                        </label>
+                      ))}
+                    </div>
                   ) : (
                     <>
-                    <input
-                      type={field.type === 'password' && field.showPassword !== undefined
-                        ? (field.showPassword ? 'text' : 'password')
-                        : field.type}
-                      value={field.value}
-                      onChange={field.onChange}
-                      placeholder={field.placeholder}
-                      className={`w-full ${field.icon ? 'pl-10' : 'pl-4'} ${field.hasToggle ? 'pr-10' : 'pr-4'} py-3 border ${errors[field.name] ? 'border-red-500 bg-red-50' : 'border-gray-200'
-                        } rounded-lg focus:ring-2 focus:ring-primary outline-none`}
-                      required={field.required}
-                      disabled={loading || field.disabled}
-                      autoComplete={field.autoComplete}
-                      name={field.name}
-                    />
-                    
+                      <input
+                        type={field.type === 'password' && field.showPassword !== undefined
+                          ? (field.showPassword ? 'text' : 'password')
+                          : field.type}
+                        value={field.value}
+                        style={{ color }}
+                        onChange={field.onChange}
+                        placeholder={field.placeholder}
+                        className={`w-full ${field.icon ? 'pl-10' : 'pl-4'} ${field.hasToggle ? 'pr-10' : 'pr-4'} py-3 border ${errors[field.name] ? 'border-red-500 bg-red-50' : 'border-gray-200'
+                          } rounded-lg focus:ring-2 focus:ring-primary outline-none`}
+                        required={field.required}
+                        disabled={loading || field.disabled}
+                        autoComplete={field.autoComplete}
+                        name={field.name}
+                      />
+
                     </>
                   )}
                   {field.hasToggle && (
@@ -113,16 +138,16 @@ export default function AuthForm({
                 </div>
                 {errors[field.name] && (
                   <>
-                  <Paragraph className="text-sm text-red-500 mt-1">{errors[field.name]}</Paragraph>
-                  {field.sublabel && (
-                    <div className='relative'>
-                      <Link className='absolute -top-5 right-0' href={field.sublabellink}>{field.sublabel}</Link>
-                    </div>
-                  )}
+                    <Paragraph className="text-sm text-red-500 mt-1">{errors[field.name]}</Paragraph>
+                    {field.sublabel && (
+                      <div className='relative'>
+                        <Link className='absolute -top-5 right-0' href={field.sublabellink}>{field.sublabel}</Link>
+                      </div>
+                    )}
                   </>
-                  
+
                 )}
-                
+
               </div>
             ))}
 

@@ -9,7 +9,7 @@ import DynamicTable from "../../template/DynamicTable";
 import Popup from "../Popup";
 import AuthForm from "../../template/AuthForm";
 import { toast } from "react-toastify";
-import AssignRole from "./Role/assignRole";
+import AssignRole from "./Role/AssignRole";
 import NotifyForm from "../../template/NotifyForm";
 import {
   faEye,
@@ -41,6 +41,7 @@ export default function RolesTable() {
     }
   };
 
+
   useEffect(() => {
     fetchRoles();
     let interval;
@@ -53,13 +54,12 @@ export default function RolesTable() {
   }, [loading, timer]);
 
   const handleDeleteConfirmed = async (role) => {
-    console.log("Delete called for:", role);
     try {
       setLoading(true);
       const res = await deleteRoleById(role._id);
-      console.log("Backend response:", res);
       toast.success("Role deleted");
       setRoles((prev) => prev.filter((r) => r._id !== role._id));
+      setShowDeleteConfirm(false);
     } catch (err) {
       console.error("Delete failed:", err.response?.data || err.message);
       toast.error("Failed to delete role");
@@ -75,6 +75,7 @@ export default function RolesTable() {
       await Promise.all(bulkToDelete.map(deleteRoleById));
       toast.success(`Deleted ${bulkToDelete.length} roles`);
       setRoles((prev) => prev.filter((r) => !bulkToDelete.includes(r._id)));
+      setShowBulkConfirm(false);
     } catch (err) {
       toast.error("Bulk delete failed");
       console.error(err);
@@ -82,7 +83,7 @@ export default function RolesTable() {
       setLoading(false);
       setShowBulkConfirm(false);
       setBulkToDelete([]);
-      setSelected([]); // clear selection in DynamicTable
+      setSelectedRole([]); 
     }
   };
 
@@ -114,16 +115,30 @@ export default function RolesTable() {
       },
       {
         name: "permissions",
-        label: "Permissions (comma-separated)",
-        type: "textarea",
-        value: selectedRole.permissions?.join(", ") || "",
-        onChange: (e) =>
-          setSelectedRole({
-            ...selectedRole,
-            permissions: e.target.value.split(",").map((p) => p.trim()),
-          }),
+        label: "Permissions",
+        type: "checkbox-group",
+        value: selectedRole.permissions || [],
+        onToggle: (permission) => {
+          setSelectedRole((prev) => ({
+            ...prev,
+            permissions: prev.permissions.includes(permission)
+              ? prev.permissions.filter((p) => p !== permission)
+              : [...prev.permissions, permission],
+          }));
+        },
+        options: [
+          { label: "Admin Dashboard", value: "admin_dashboard" },
+          { label: "User Dashboard", value: "user_dashboard" },
+          { label: "View Leads", value: "view_leads" },
+          { label: "View Archive Leads", value: "view_archive_leads" },
+          { label: "View Users", value: "view_users" },
+          { label: "View Roles", value: "view_roles" },
+          { label: "Delete Leads", value: "delete_leads" },
+          { label: "Register User", value: "register_user" },
+        ],
         disabled: !isEditing,
-      },
+      }
+
     ]
     : [];
 
@@ -197,6 +212,7 @@ export default function RolesTable() {
         bulkActions={bulkActions}
         extraButtons={'Assign Role'}
         extrabuttonOnClcik={() => setOpen(true)}
+        loading={loading}
       />
 
       <Popup open={showForm} onClose={() => setShowForm(false)}>

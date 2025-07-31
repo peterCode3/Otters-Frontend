@@ -145,6 +145,9 @@ export default function AddNewClient() {
     setLoading(false);
   };
 
+const color = 'var(--color-black)';
+
+
 
   return (
     <div className="min-h-screen flex items-center justify-center text-text p-4">
@@ -154,7 +157,8 @@ export default function AddNewClient() {
           <div className="flex flex-col flex-shrink-0 w-full md:w-[400px] max-w-[420px] px-8 py-8 gap-6">
             <div className="flex items-center justify-between mb-2">
               <div>
-                <h2 className="text-xl font-bold text-text flex items-center gap-2 dark:text-white">
+                <h2 className="text-xl font-bold flex items-center gap-2 dark:text-white"
+                style={{ color }}>
                   <FontAwesomeIcon icon={faUserPlus} className="text-primary" />
                   Add New Client
                 </h2>
@@ -172,12 +176,12 @@ export default function AddNewClient() {
             <form className="flex flex-col gap-5" autoComplete="off" onSubmit={handleSubmit}>
               {/* Client Name */}
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold mb-1 text-text dark:text-white">
+                <label className="text-sm font-semibold mb-1 dark:text-white" style={{ color }}>
                   Client Name <span className="text-danger">*</span>
                 </label>
                 <div className="relative">
                   {errors.username && (
-                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-red-400">
+                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-red-400" style={{ color }}>
                       <FontAwesomeIcon icon={faUser} />
                     </span>
                   )}
@@ -196,7 +200,7 @@ export default function AddNewClient() {
               </div>
               {/* Email */}
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold mb-1 text-text dark:text-white">Email Address</label>
+                <label className="text-sm font-semibold mb-1 dark:text-white" style={{ color }}>Email Address</label>
                 <div className="relative">
                   {errors.email && (
                     <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-red-400">
@@ -218,7 +222,7 @@ export default function AddNewClient() {
               </div>
               {/* Password */}
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold mb-1 text-text dark:text-white">Password</label>
+                <label className="text-sm font-semibold mb-1 dark:text-white" style={{ color }}>Password</label>
                 <div className="relative">
                   {errors.password && (
                     <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-red-400">
@@ -240,7 +244,7 @@ export default function AddNewClient() {
               </div>
               {/* Industry Tag */}
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold mb-1 text-text dark:text-white">Industry Tag</label>
+                <label className="text-sm font-semibold mb-1 dark:text-white" style={{ color }}>Industry Tag</label>
                 <div className="relative">
                   {errors.industry_tag && (
                     <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-red-400">
@@ -264,7 +268,7 @@ export default function AddNewClient() {
               </div>
               {/* Client Type */}
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold mb-1 text-text dark:text-white">Client Type</label>
+                <label className="text-sm font-semibold mb-1 dark:text-white" style={{ color }}>Client Type</label>
                 <div className="relative">
                   <div className="flex items-center gap-2 bg-background rounded-lg px-2 py-1.5 w-fit dark:bg-[#1a2a3a]">
                     {TYPE_OPTIONS.map(type => (
@@ -293,7 +297,7 @@ export default function AddNewClient() {
               </div>
               {/* Logo Upload */}
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold mb-1 text-text dark:text-white">Logo Upload</label>
+                <label className="text-sm font-semibold mb-1 dark:text-white" style={{ color }}>Logo Upload</label>
                 <div
                   className="flex items-center justify-center bg-background border-2 border-dashed border-primary/40 rounded-lg px-4 py-6 cursor-pointer hover:bg-primary/10 transition min-h-[88px] relative dark:bg-[#1a2a3a] dark:border-primary/60"
                   onClick={() => fileInputRef.current.click()}
@@ -318,7 +322,7 @@ export default function AddNewClient() {
               </div>
               {/* Initial Status */}
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold mb-1 text-text dark:text-white">Initial Status</label>
+                <label className="text-sm font-semibold mb-1 dark:text-white" style={{ color }}>Initial Status</label>
                 <div className="relative">
                   <div className="flex gap-2">
                     {STATUS_OPTIONS.map(label => {
@@ -337,6 +341,7 @@ export default function AddNewClient() {
                             : `bg-${color}/10 text-${color} hover:bg-${color}/20`
                             }`}
                           onClick={() => handleStatus(label)}
+                          style={{ color }}
                         >
                           {label}
                         </button>
@@ -378,9 +383,10 @@ export default function AddNewClient() {
                 </div>
               </div> */}
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold mb-1 text-text dark:text-white">Client Status</label>
+                <label className="text-sm font-semibold mb-1 dark:text-white" style={{ color }}>Client Status</label>
                 <div>
-                  <label>
+                  <label
+                  style={{ color }}>
                     <input
                       type="radio"
                       name="status"
@@ -389,7 +395,8 @@ export default function AddNewClient() {
                       onChange={e => handleChange('status', e.target.value)}
                     /> Active
                   </label>
-                  <label className="ml-4">
+                  <label className="ml-4"
+                  style={{ color }}>
                     <input
                       type="radio"
                       name="status"
@@ -405,7 +412,7 @@ export default function AddNewClient() {
               </div>
               {/* Internal Notes */}
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold mb-1 text-text dark:text-white" htmlFor="clientNotes">
+                <label className="text-sm font-semibold mb-1 dark:text-white" htmlFor="clientNotes" style={{ color }}>
                   Internal Notes
                 </label>
                 <textarea
@@ -449,7 +456,7 @@ export default function AddNewClient() {
           {/* Right Column: Lead Qualification Rules */}
           <div className="flex-1 min-w-0 flex flex-col px-8 py-8 md:pl-10 gap-6">
             <div className="mb-1">
-              <h3 className="text-lg font-bold text-text flex items-center gap-2 dark:text-white">
+              <h3 className="text-lg font-bold flex items-center gap-2 dark:text-white" style={{ color }}>
                 <FontAwesomeIcon icon={faFilter} className="text-primary" />
                 Lead Qualification Criteria
               </h3>
@@ -462,18 +469,20 @@ export default function AddNewClient() {
                 {rules.map((rule, idx) => (
                   <div key={idx} className="flex flex-wrap md:flex-nowrap gap-3 items-center bg-background/90 rounded-lg px-4 py-3 mb-0 max-w-[420px] relative dark:bg-[#1a2a3a]" style={{ minWidth: 0 }}>
                     <select
-                      className="rule-field-dropdown flex-shrink-0 min-w-[120px] max-w-[180px] border border-gray-200 rounded-lg px-3 py-2 text-sm text-text bg-white focus:ring-primary focus:outline-none dark:border-gray-700 dark:bg-[#1a2a3a] dark:text-white"
+                      className="rule-field-dropdown flex-shrink-0 min-w-[120px] max-w-[180px] border border-gray-200 rounded-lg px-3 py-2 text-sm  bg-white focus:ring-primary focus:outline-none dark:border-gray-700 dark:bg-[#1a2a3a] dark:text-white"
                       value={rule.field}
                       onChange={e => updateRule(idx, 'field', e.target.value)}
+                      style={{ color }}
                     >
                       {RULE_FIELDS.map(opt => (
-                        <option key={opt.value} value={opt.value}>{opt.label}</option>
+                        <option key={opt.value} value={opt.value} style={{ color }}>{opt.label}</option>
                       ))}
                     </select>
                     <input
-                      className="w-full rule-value-input flex-1 min-w-[100px] max-w-[180px] border border-gray-200 rounded-lg px-3 py-2 text-sm text-text bg-white placeholder-secondary focus:ring-primary focus:outline-none dark:border-gray-700 dark:bg-[#1a2a3a] dark:text-white"
+                      className="w-full rule-value-input flex-1 min-w-[100px] max-w-[180px] border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white placeholder-secondary focus:ring-primary focus:outline-none dark:border-gray-700 dark:bg-[#1a2a3a] dark:text-white"
                       placeholder="Enter value..."
                       value={rule.value}
+                      style={{ color }}
                       onChange={e => updateRule(idx, 'value', e.target.value)}
                     />
                     <button

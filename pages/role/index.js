@@ -5,6 +5,7 @@ import RolesTable from '@/src/components/organism/AdminDashboard/RolesTable'
 import Popup from '@/src/components/organism/Popup'
 import CsvWizard from '@/src/components/organism/UploadCSV/CsvWizard'
 import RolesPage from '../../src/components/organism/AdminDashboard/Role/CreateRole'
+import withAuthorization from '@/utils/withAuthorization'
 
 function index() {
   const [open, setOpen] = useState(false);

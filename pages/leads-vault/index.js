@@ -9,6 +9,7 @@ import { getCurrentUser } from '@/utils/userApi'
 import { useState } from 'react'
 import Popup from '@/src/components/organism/Popup'
 import CsvWizard from '@/src/components/organism/UploadCSV/CsvWizard'
+import withAuthorization from '@/utils/withAuthorization'
 
 function Index() {
   const [clientIdState, setClientIdState] = React.useState(null)
@@ -31,8 +32,8 @@ function Index() {
         // Get current user and use their id as clientId
         try {
           const user = await getCurrentUser();
-          setClientIdState(user._id);
-          const data = await fetchLeadByClientId(user._id);
+          setClientIdState(user.id);
+          const data = await fetchLeadByClientId(user.id);
           setClient(data.client);
         } catch {
           setClient(null);
@@ -49,7 +50,9 @@ function Index() {
     <div className='ml-64 p-8 min-h-screen transition-colors bg-[var(--body-background)] text-text'>
       <Sidebar/>
       <DashboardHeader title='Leads Vault' btnText='Import CSV' onButtonClick={() => setOpenCsv(true)}/>
-      <LeadVaultPage clientId={clientIdState}/>
+      <LeadVaultPage clientId={clientIdState}
+        description='Are you sure you want to archive lead(s)?'
+      />
       <Popup open={openCsv} onClose={() => setOpenCsv(false)}>
               <CsvWizard />
             </Popup>
@@ -57,4 +60,4 @@ function Index() {
   )
 }
 
-export default Index
+export default withAuthorization (Index, 'view_leads')

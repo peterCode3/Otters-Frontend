@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toast } from 'react-toastify';
 import { signupUser } from '@/services/authService';
 import '@/styles/auth.css';
+import withAuthorization from '@/utils/withAuthorization';
 
 
 const RULE_FIELDS = [
@@ -32,7 +33,7 @@ const INDUSTRY_OPTIONS = [
 const TYPE_OPTIONS = ["OtterLite", "OtterScale", "OtterPrime"];
 const STATUS_OPTIONS = ["Healthy", "At Risk", "Poor"];
 
-export default function AddClientPage() {
+function AddClientPage() {
   const router = useRouter();
   const [form, setForm] = useState({
     username: '',
@@ -503,3 +504,6 @@ export default function AddClientPage() {
     </div>
   );
 }
+
+
+export default withAuthorization (AddClientPage, 'register_user')

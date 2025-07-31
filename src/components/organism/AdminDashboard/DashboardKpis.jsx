@@ -47,7 +47,14 @@ const DashboardKpis = () => {
     setFilters((prev) => ({ ...prev, [name]: value }));
   };
 
-  if (loading || !trendStats) return <div>Loading...</div>;
+  if (loading || !trendStats) return (
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <Card/>
+        <Card/>
+        <Card/>
+        <Card/>
+      </div>
+  );
 
   // 🔢 Safe Calculations
   const totalLeads = leads.length;
@@ -90,7 +97,7 @@ const DashboardKpis = () => {
         ]}
         values={filters}
         onChange={handleFilterChange}
-        className="mb-4"
+        className="mb-4 gap-x-6 gap-y-4 bg-white shadow-soft rounded-xl px-6 py-4"
       />
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">

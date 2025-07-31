@@ -2,11 +2,13 @@
 import React, { useEffect, useState } from "react";
 import DynamicTable from "../../template/DynamicTable";
 import AuthForm from "../../template/AuthForm";
+import ArchivedNotifiy from "../LeadVault/ArchivedNotifiy";
 import Popup from "../Popup";
 import {
   faEye,
   faEdit,
   faTrash,
+  faEyeSlash
 } from "@fortawesome/free-solid-svg-icons";
 import {
   getAllUsers,
@@ -23,7 +25,10 @@ export default function UsersTable() {
   const [loading, setLoading] = useState(true);
   const [uploading, setupLoading] = useState(false);
   const [timer, setTimer] = useState('');
-  // ✅ Load users
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
+
+
   const fetchUsers = async () => {
     setLoading(true);
     try {
@@ -50,56 +55,78 @@ export default function UsersTable() {
   // ✅ Form field config
   const userFormFields = selectedUser
     ? [
-        {
-          name: "username",
-          label: "Username",
-          value: selectedUser.username || "",
-          onChange: (e) => setSelectedUser({ ...selectedUser, username: e.target.value }),
-          type: "text",
-          disabled: !isEditing,
-        },
-        {
-          name: "email",
-          label: "Email",
-          value: selectedUser.email || "",
-          onChange: (e) => setSelectedUser({ ...selectedUser, email: e.target.value }),
-          type: "email",
-          disabled: !isEditing,
-        },
-        {
-          name: "industry",
-          label: "Industry",
-          value: selectedUser.industry || "",
-          onChange: (e) => setSelectedUser({ ...selectedUser, industry: e.target.value }),
-          type: "text",
-          disabled: !isEditing,
-        },
-        {
-          name: "region",
-          label: "Region",
-          value: selectedUser.region || "",
-          onChange: (e) => setSelectedUser({ ...selectedUser, region: e.target.value }),
-          type: "text",
-          disabled: !isEditing,
-        },
-        {
-          name: "company_size",
-          label: "Company Size",
-          value: selectedUser.company_size || "",
-          onChange: (e) => setSelectedUser({ ...selectedUser, company_size: e.target.value }),
-          type: "text",
-          disabled: !isEditing,
-        },
-      ]
+      {
+        name: "username",
+        label: "Username",
+        value: selectedUser.username || "",
+        onChange: (e) => setSelectedUser({ ...selectedUser, username: e.target.value }),
+        type: "text",
+        disabled: !isEditing,
+      },
+      {
+        name: "email",
+        label: "Email",
+        value: selectedUser.email || "",
+        onChange: (e) => setSelectedUser({ ...selectedUser, email: e.target.value }),
+        type: "email",
+        disabled: !isEditing,
+      },
+      {
+        name: "industry",
+        label: "Industry",
+        value: selectedUser.industry || "",
+        onChange: (e) => setSelectedUser({ ...selectedUser, industry: e.target.value }),
+        type: "text",
+        disabled: !isEditing,
+      },
+      {
+        name: "region",
+        label: "Region",
+        value: selectedUser.region || "",
+        onChange: (e) => setSelectedUser({ ...selectedUser, region: e.target.value }),
+        type: "text",
+        disabled: !isEditing,
+      },
+      ...(isEditing
+        ? [
+          {
+            name: "password",
+            label: "New Password",
+            value: selectedUser.password || "",
+            onChange: (e) => setSelectedUser({ ...selectedUser, password: e.target.value }),
+            type: "password",
+            required: false,
+            hasToggle: true,
+            showPassword: selectedUser.showPassword || false,
+            onToggle: () =>
+              setSelectedUser((prev) => ({
+                ...prev,
+                showPassword: !prev.showPassword,
+              })),
+            toggleIconShow: faEye,
+            toggleIconHide: faEyeSlash,
+          },
+        ]
+        : []),
+    ]
     : [];
+
 
   // ✅ Submit handler
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    setupLoading(true)
-    setTimer(3)
+    setupLoading(true);
+    setTimer(3);
+
     try {
-      await updateUserById(selectedUser._id, selectedUser);
+      const { password, showPassword, ...rest } = selectedUser;
+      const updatePayload = { ...rest };
+
+      if (password && password.trim()) {
+        updatePayload.password = password;
+      }
+
+      await updateUserById(selectedUser._id, updatePayload);
       toast.success("User updated");
       setShowForm(false);
       fetchUsers();
@@ -109,16 +136,21 @@ export default function UsersTable() {
     }
   };
 
-  // ✅ Delete single
-  const handleDelete = async (user) => {
+
+
+  const handlePermanentDelete = async () => {
     try {
-      await deleteUserById(user._id);
+      await deleteUserById(userToDelete._id);
       toast.success("User deleted");
-      setUsers((prev) => prev.filter((u) => u._id !== user._id));
+      setUsers((prev) => prev.filter((u) => u._id !== userToDelete._id));
     } catch (err) {
       toast.error("Delete failed");
+    } finally {
+      setIsDeleteModalOpen(false);
+      setUserToDelete(null);
     }
   };
+
 
   // ✅ Bulk delete
   const handleBulkDelete = async (ids) => {
@@ -137,7 +169,6 @@ export default function UsersTable() {
     { key: "email", label: "Email" },
     { key: "industry", label: "Industry" },
     { key: "region", label: "Region" },
-    { key: "company_size", label: "Company Size" },
     {
       key: "createdAt",
       label: "Created At",
@@ -169,7 +200,10 @@ export default function UsersTable() {
       title: "Delete",
       icon: faTrash,
       color: "red",
-      onClick: handleDelete,
+      onClick: (user) => {
+        setUserToDelete(user);
+        setIsDeleteModalOpen(true);
+      },
     },
   ];
 
@@ -191,6 +225,7 @@ export default function UsersTable() {
         selectable
         rowActions={rowActions}
         bulkActions={bulkActions}
+        loading={loading}
       />
 
       <Popup open={showForm} onClose={() => setShowForm(false)}>
@@ -205,6 +240,18 @@ export default function UsersTable() {
           bottomText=""
         />
       </Popup>
+
+      <Popup open={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)}>
+        <ArchivedNotifiy
+          onAction={handlePermanentDelete}
+          onclose={() => setIsDeleteModalOpen(false)}
+          description="Are you sure you want to permanently delete this user? This action cannot be undone."
+          heading="Permanently Delete User?"
+          subDescription="This will remove the user from the system permanently."
+          primaryButtonText="Delete Permanently"
+        />
+      </Popup>
+
     </>
   );
 }
