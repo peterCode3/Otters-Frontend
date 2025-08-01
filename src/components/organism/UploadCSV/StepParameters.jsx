@@ -98,7 +98,8 @@ export default function StepParameters({
   return (
     <>
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-bold">Set Filtering Parameters</h2>
+        <h2 className="text-2xl font-bold" 
+        style={{ color: "var(--color-black)" }}>Set Filtering Parameters</h2>
         <button
           className="flex items-center gap-2 px-3 py-1.5 rounded bg-primary/10 text-primary font-medium"
           onClick={() => setShowAI(true)}
@@ -115,9 +116,10 @@ export default function StepParameters({
             <select
               className="w-full border rounded-lg px-3 py-2"
               value={param.name}
+              style={{ color: "var(--color-black)", background: "var(--color-white)" }}
               onChange={e => handleSelect(idx, e.target.value)}
             >
-              <option value="">Select or enter parameter</option>
+              <option value="" >Select or enter parameter</option>
               {[...defaultOptions, ...parameters]
                 .filter((opt, index, self) =>
                   index === self.findIndex(o => o.name === opt.name)
@@ -132,6 +134,7 @@ export default function StepParameters({
             <div className="relative">
               <textarea
                 className="w-full border rounded-lg px-3 py-2"
+                style={{ color: "var(--color-black)" }}
                 rows={showFull[idx] ? 3 : 2}
                 value={
                   showFull[idx]

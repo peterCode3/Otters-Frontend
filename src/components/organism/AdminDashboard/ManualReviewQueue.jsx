@@ -70,7 +70,20 @@ export default function ManualReviewQueue() {
               <tr><td colSpan={5} className="py-6 text-center">No leads for review.</td></tr>
             ) : (
               leads.map(lead => (
-                <tr key={lead._id} className="border-b hover:bg-gray-50 dark:hover:bg-gray-800" style={{ borderColor: "#F3F4F6" }}>
+                <tr key={lead._id} className="border-b"
+                
+                  onMouseOver={e =>
+                    (e.currentTarget.style.background = "var(--table-row-hover)")
+                  }
+                  onMouseOut={e =>
+                    (e.currentTarget.style.background = "var(--table-bg)")
+                  }
+                    style={{
+                      background: "var(--table-bg)",
+                      color: "var(--table-text)",
+                      borderBottom: "1px solid var(--table-border)",
+                    }}
+                    >
                   <td className="py-3 px-4">
                     <div className="cursor-pointer flex items-center" onClick={() => setSelectedLeadId(lead._id)}>
                       <FontAwesomeIcon icon={faChevronRight} className="text-xs mr-2 text-gray-400" />

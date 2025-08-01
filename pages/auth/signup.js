@@ -154,7 +154,8 @@ function AddClientPage() {
           <div className="flex flex-col flex-shrink-0 w-full md:w-[400px] max-w-[420px] px-8 py-8 gap-6">
             <div className="flex items-center justify-between mb-2">
               <div>
-                <h2 className="text-xl font-bold text-text flex items-center gap-2 dark:text-white">
+                <h2 className="text-xl font-bold flex items-center gap-2 dark:text-white"
+                style={{color: 'var(--color-black)'}}>
                   <FontAwesomeIcon icon={faUserPlus} className="text-primary" />
                   Add New Client
                 </h2>

@@ -40,7 +40,8 @@ export default function FilterBar({
     >
       {filters.map((filter) => (
         <div className="flex flex-col" key={filter.name}>
-          <label className="text-xs font-medium text-secondary mb-1">
+          <label className="text-xs font-medium text-secondary mb-1"
+            style={{ color: 'var(--color-black)' }}>
             {filter.label}
           </label>
           <select
@@ -61,6 +62,7 @@ export default function FilterBar({
         {buttons.map((btn, idx) => (
           <button
             key={btn.label || idx}
+            style={{ color: 'var(--color-black)' }}
             className={`cursor-pointer px-3 py-2 text-sm flex items-center transition-colors
               ${btn.active ? "bg-[var(--color-primary)] text-white" : ""}
               ${btn.className || ""}

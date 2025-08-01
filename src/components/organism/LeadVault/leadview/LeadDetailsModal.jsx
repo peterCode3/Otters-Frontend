@@ -144,6 +144,7 @@ export default function LeadDetailsModal({ leadId, open, onClose }) {
         <button
           className="cursor-pointer absolute top-4 right-4 text-secondary hover:text-danger text-3xl transition rounded-full p-2"
           onClick={onClose}
+          style={{ color: 'var(--color-black)' }}
         >
           &times;
         </button>
@@ -169,12 +170,14 @@ export default function LeadDetailsModal({ leadId, open, onClose }) {
                 <div className="flex items-center gap-2">
                   {isEditing ? (
                     <input
-                      className="text-xl font-bold text-text w-full border px-2 py-1 rounded"
+                      className="text-xl font-bold w-full border px-2 py-1 rounded"
                       value={editableLead.name}
                       onChange={(e) => handleInputChange("name", e.target.value)}
+                      style={{ color: 'var(--color-black)' }}     
                     />
                   ) : (
-                    <h2 className="text-xl font-bold text-text">{lead.name}</h2>
+                    <h2 className="text-xl font-bold"
+                      style={{ color: 'var(--color-black)' }}     >{lead.name}</h2>
                   )}
                   <span className="px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary">
                     {client.industry_tag || "Client"}
@@ -301,7 +304,7 @@ export default function LeadDetailsModal({ leadId, open, onClose }) {
 
             {/* Notes */}
             <div className="flex flex-col gap-2">
-              <label htmlFor="reviewer-notes" className="text-sm font-semibold text-text">Reviewer Notes</label>
+              <label style={{ color: 'var(--color-black)' }} htmlFor="reviewer-notes" className="text-sm font-semibold">Reviewer Notes</label>
               <textarea
                 id="reviewer-notes"
                 rows={3}

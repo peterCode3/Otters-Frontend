@@ -9,6 +9,7 @@ export default function Popup({ open, onClose, children }) {
         <button
           className="absolute top-2 right-2 text-white cursor-pointer text-5xl closed hover:text-primary"
           onClick={onClose}
+          style={{ color: 'var(--color-black)' }}
         >
           &times;
         </button>

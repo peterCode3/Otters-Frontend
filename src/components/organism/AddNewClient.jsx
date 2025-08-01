@@ -151,14 +151,14 @@ const color = 'var(--color-black)';
 
   return (
     <div className="min-h-screen flex items-center justify-center text-text p-4">
-      <div className="w-full max-w-5xl rounded-2xl shadow-soft bg-white flex flex-col relative dark:bg-[#14212e]">
+      <div className="w-full max-w-5xl rounded-2xl shadow-soft bg-white flex flex-col relative">
         <div className="flex flex-col md:flex-row">
           {/* Left Column */}
           <div className="flex flex-col flex-shrink-0 w-full md:w-[400px] max-w-[420px] px-8 py-8 gap-6">
             <div className="flex items-center justify-between mb-2">
               <div>
                 <h2 className="text-xl font-bold flex items-center gap-2 dark:text-white"
-                style={{ color }}>
+                style={{ color: 'var(--color-black)' }}>
                   <FontAwesomeIcon icon={faUserPlus} className="text-primary" />
                   Add New Client
                 </h2>
@@ -467,9 +467,9 @@ const color = 'var(--color-black)';
             <div className="flex flex-col gap-4 max-h-[340px] overflow-y-auto pr-2">
               <div className="flex flex-col gap-3">
                 {rules.map((rule, idx) => (
-                  <div key={idx} className="flex flex-wrap md:flex-nowrap gap-3 items-center bg-background/90 rounded-lg px-4 py-3 mb-0 max-w-[420px] relative dark:bg-[#1a2a3a]" style={{ minWidth: 0 }}>
+                  <div key={idx} className="flex flex-wrap md:flex-nowrap gap-3 items-center bg-background/90 rounded-lg px-4 py-3 mb-0 max-w-[420px] relative" style={{ minWidth: 0 }}>
                     <select
-                      className="rule-field-dropdown flex-shrink-0 min-w-[120px] max-w-[180px] border border-gray-200 rounded-lg px-3 py-2 text-sm  bg-white focus:ring-primary focus:outline-none dark:border-gray-700 dark:bg-[#1a2a3a] dark:text-white"
+                      className="rule-field-dropdown flex-shrink-0 min-w-[120px] max-w-[180px] border border-gray-200 rounded-lg px-3 py-2 text-sm  bg-white focus:ring-primary focus:outline-none dark:border-gray-700  dark:text-white"
                       value={rule.field}
                       onChange={e => updateRule(idx, 'field', e.target.value)}
                       style={{ color }}
@@ -479,7 +479,7 @@ const color = 'var(--color-black)';
                       ))}
                     </select>
                     <input
-                      className="w-full rule-value-input flex-1 min-w-[100px] max-w-[180px] border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white placeholder-secondary focus:ring-primary focus:outline-none dark:border-gray-700 dark:bg-[#1a2a3a] dark:text-white"
+                      className="w-full rule-value-input flex-1 min-w-[100px] max-w-[180px] border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white placeholder-secondary focus:ring-primary focus:outline-none dark:border-gray-700 dark:text-white"
                       placeholder="Enter value..."
                       value={rule.value}
                       style={{ color }}

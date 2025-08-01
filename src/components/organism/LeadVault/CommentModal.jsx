@@ -39,7 +39,7 @@ export default function CommentModal({ leadId, leadName, open, onClose }) {
                     <span className="mr-3 text-xl text-primary">
                         <FontAwesomeIcon icon={faCommentDots} />
                     </span>
-                    <h2 className="font-semibold text-lg text-text">💬 Commenting on: {leadName}</h2>
+                    <h2 className="font-semibold text-lg" style={{color : 'var(--color-black)'}}>💬 Commenting on: {leadName}</h2>
                 </div>
                 <div className="px-8 py-6 max-h-[70vh] overflow-y-auto">
                     {/* Existing Comments */}
@@ -53,15 +53,16 @@ export default function CommentModal({ leadId, leadName, open, onClose }) {
                                         className="w-10 h-10 rounded-full object-cover"
                                     />
                                 ) : (
-                                    <div className="w-10 h-10 bg-primary bg-opacity-10 text-primary font-bold flex items-center justify-center rounded-full">
+                                    <div className="w-10 h-10 bg-primary bg-opacity-10 font-bold flex items-center justify-center rounded-full"
+                                    style={{color : 'var(--color-black'}} >
                                         {c.comment_type?.charAt(0) || 'U'}
                                     </div>
                                 )}
 
                                 <div className="flex-1">
                                     <div className="flex items-center space-x-2 mb-1">
-                                        <span className="font-semibold text-sm text-text">{c.comment_type || 'User'}</span>
-                                        <span className="text-xs text-secondary">| {new Date(c.createdAt).toLocaleString()}</span>
+                                        <span className="font-semibold text-sm" style={{color : 'var(--color-black'}}>{c.comment_type || 'User'}</span>
+                                        <span className="text-xs text-secondary" >| {new Date(c.createdAt).toLocaleString()}</span>
                                     </div>
                                     <div className="bg-gray-50 rounded-xl px-4 py-3 text-sm shadow-soft" style={{ color: 'var(--text-secondry-black)' }}>
                                         {c.leads_comment}
@@ -69,12 +70,12 @@ export default function CommentModal({ leadId, leadName, open, onClose }) {
                                 </div>
                             </div>
                         ))}
-                        {comments.length === 0 && <div className="text-sm text-secondary">No comments yet.</div>}
+                        {comments.length === 0 && <div className="text-sm" style={{color : 'var(--color-black'}}>No comments yet.</div>}
                     </section>
 
                     {/* Add Comment */}
                     <div className="mt-4">
-                        <label for="comment-input" class="block font-medium text-text text-base mb-2">Add Comment</label>            <textarea
+                        <label for="comment-input" class="block font-medium text-base mb-2" style={{color : 'var(--color-black'}}>Add Comment</label>            <textarea
                             rows={3}
                             className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm mb-3 resize-none focus:outline-none focus:ring-primary focus:border-primary"
                             placeholder="Write an internal note or tag a teammate…"
@@ -85,7 +86,8 @@ export default function CommentModal({ leadId, leadName, open, onClose }) {
                         <div className="flex justify-end space-x-2">
                             <button
                                 onClick={onClose}
-                                className="px-4 py-2 cursor-pointer text-sm rounded-lg border border-gray-200 text-text bg-white hover:bg-gray-50"
+                                className="px-4 py-2 cursor-pointer text-sm rounded-lg border border-gray-200 bg-white"
+                                style={{ color: 'var(--color-black)' }}
                             >
                                 Cancel
                             </button>

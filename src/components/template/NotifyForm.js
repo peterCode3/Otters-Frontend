@@ -21,7 +21,8 @@ export default function NotifyForm({
                     {title && (
                         <div className="flex justify-center mb-6">
                             <div className="flex items-center">
-                                <span className="text-xl font-bold">{title}</span>
+                                <span className="text-xl font-bold"
+                                style={{color : 'var(--color-black)'}}>{title}</span>
                             </div>
                         </div>
                     )}
@@ -32,7 +33,7 @@ export default function NotifyForm({
                             </span>
                         </span>
                     </div>
-                    <h2 className="text-xl font-bold mb-2">{heading}</h2>
+                    <h2 className="text-xl font-bold mb-2" style={{color : 'var(--color-black)'}}>{heading}</h2>
                     <p className="text-secondary mb-4">{description}</p>
                     {subDescription && (
                         <p className="text-secondary text-sm mb-6">{subDescription}</p>

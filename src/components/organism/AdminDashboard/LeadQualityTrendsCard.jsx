@@ -118,7 +118,8 @@ export default function LeadQualityTrendsCard({
   return (
     <div className="bg-white rounded-xl p-6 shadow-soft col-span-3">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="font-bold text-lg text-gray-800">
+        <h2 className="font-bold text-lg text-gray-800"
+        style={{ color: "var(--leadtrends-title)" }}>
           Lead Quality Trends{" "}
           {/* {selectedClient !== "all" && <span className="text-sm text-gray-500">– Client: {selectedClient}</span>} */}
         </h2>
@@ -128,6 +129,7 @@ export default function LeadQualityTrendsCard({
               className="appearance-none bg-white border border-gray-200 rounded-lg py-1.5 pl-4 pr-8 text-sm focus:outline-none"
               value={selectedClient}
               onChange={(e) => setSelectedClient(e.target.value)}
+              style={{ color: 'var(--color-black)' }}
             >
               <option value="all">All Clients</option>
               {clients.map((c) => (
@@ -143,6 +145,7 @@ export default function LeadQualityTrendsCard({
               className="appearance-none bg-white border border-gray-200 rounded-lg py-1.5 pl-4 pr-8 text-sm focus:outline-none"
               value={selectedPeriod}
               onChange={(e) => setSelectedPeriod(e.target.value)}
+              style={{ color: 'var(--color-black)' }}
             >
               {periods.map((p) => (
                 <option key={p}>{p}</option>
@@ -156,22 +159,22 @@ export default function LeadQualityTrendsCard({
       </div>
 
       <div className="h-80">
-        <Line data={data} options={options} height={320} />
+        <Line data={data} options={options} height={320}/>
       </div>
 
       <div className="flex justify-between mt-4 text-xs text-gray-500">
         <div className="flex items-center">
           <div className="w-3 h-3 rounded-full mr-2" style={{ background: primaryColor }}></div>
-          <span>Avg IQ Score</span>
+          <span style={{ color: 'var(--color-black)' }}>Avg IQ Score</span>
         </div>
         <div className="flex items-center">
           <div className="w-3 h-3 rounded-full mr-2" style={{ background: grayColor }}></div>
-          <span>Target Score ({targetScore})</span>
+          <span style={{ color: 'var(--color-black)' }}>Target Score ({targetScore})</span>
         </div>
         {showAnomaly && (
           <div className="flex items-center">
             <FontAwesomeIcon icon={faTriangleExclamation} className="mr-2 text-yellow-500" />
-            <span>Score Anomaly</span>
+            <span style={{ color: 'var(--color-black)' }}>Score Anomaly</span>
           </div>
         )}
       </div>
