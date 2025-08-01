@@ -7,7 +7,7 @@ import CsvWizard from '@/src/components/organism/UploadCSV/CsvWizard'
 import RolesPage from '../../src/components/organism/AdminDashboard/Role/CreateRole'
 import withAuthorization from '@/utils/withAuthorization'
 
-function Index() {
+function RolePage() {
   const [open, setOpen] = useState(false);
 
   return (
@@ -29,4 +29,4 @@ function Index() {
   )
 }
 
-export default Index
+export default RolePage
