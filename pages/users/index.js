@@ -6,7 +6,7 @@ import Popup from '@/src/components/organism/Popup'
 import AddNewClient from '@/src/components/organism/AddNewClient'
 import withAuthorization from '@/utils/withAuthorization'
 
-function Index() {
+function UserPage() {
   const [open, setOpen] = useState(false);
 
   return (
@@ -22,9 +22,9 @@ function Index() {
       </div>
       <Popup open={open} onClose={() => setOpen(false)}>
               <AddNewClient/>
-            </Popup>
+      </Popup>
     </div>
   )
 }
 
-export default withAuthorization(Index, 'view_users')
+export default withAuthorization(UserPage, 'view_users')

@@ -3,7 +3,7 @@ import React from 'react'
 import Sidebar from '@/src/components/organism/Sidebar'
 import withAuthorization from '@/utils/withAuthorization'
 
-function UserPage() {
+function Index() {
   return (
     <>
       <Sidebar />
@@ -12,4 +12,4 @@ function UserPage() {
   )
 }
 
-export default withAuthorization(UserPage, 'user_dashboard')
+export default withAuthorization(Index, 'user_dashboard')
