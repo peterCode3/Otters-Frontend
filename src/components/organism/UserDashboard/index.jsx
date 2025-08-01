@@ -5,7 +5,7 @@ import LeadQuality from './LeadQuality';
 import RecentLeads from './RecentLeads';
 import LeadPerformance from './LeadPerformance';
 import WeeklySummary from './WeeklySummary';
-import HelpPanel from './helpPanel';
+import HelpPanel from './HelpPanel';
 import ExportPanel from './ExportPanel';
 import { updateUserSettings, getLastExportDate } from '@/utils/userApi';
 import { getLeadStats, getMeLeads, getQualifiedLeads } from '@/utils/leadApi'; // Assuming you have these
