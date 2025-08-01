@@ -2,7 +2,7 @@ import React from 'react'
 import UserProfile from './profile'
 import Sidebar from '@/src/components/organism/Sidebar'
 
-function index() {
+function Index() {
   return (
     <div>
       <Sidebar/>
@@ -13,4 +13,4 @@ function index() {
   )
 }
 
-export default index
+export default Index

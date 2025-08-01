@@ -6,7 +6,7 @@ import Popup from '@/src/components/organism/Popup'
 import AddNewClient from '@/src/components/organism/AddNewClient'
 import withAuthorization from '@/utils/withAuthorization'
 
-function index() {
+function Index() {
   const [open, setOpen] = useState(false);
 
   return (
@@ -27,4 +27,4 @@ function index() {
   )
 }
 
-export default withAuthorization(index, 'view_users')
+export default withAuthorization(Index, 'view_users')
